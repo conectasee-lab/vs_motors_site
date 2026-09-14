@@ -5,6 +5,7 @@ import { vehicles, filterVehicles, type VehicleFilters } from "@/lib/vehicles";
 import VehicleCard from "@/components/VehicleCard";
 
 const brands = Array.from(new Set(vehicles.map((v) => v.brand))).sort();
+const models = Array.from(new Set(vehicles.map((v) => v.model))).sort();
 const fuels = Array.from(new Set(vehicles.map((v) => v.fuel))).sort();
 const colors = Array.from(new Set(vehicles.map((v) => v.color))).sort();
 
@@ -29,6 +30,16 @@ export default function EstoquePage() {
           <option value="">Marca</option>
           {brands.map((b) => (
             <option key={b} value={b}>{b}</option>
+          ))}
+        </select>
+
+        <select
+          className="bg-black text-white border border-gray-700 rounded px-2 py-2"
+          onChange={(e) => update("model", e.target.value)}
+        >
+          <option value="">Modelo</option>
+          {models.map((m) => (
+            <option key={m} value={m}>{m}</option>
           ))}
         </select>
 
