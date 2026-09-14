@@ -397,7 +397,7 @@ export default function Header() {
       </div>
 
       {open && (
-        <nav className="md:hidden flex flex-col bg-brand-blackSoft px-4 pb-4">
+        <nav className="md:hidden flex flex-col bg-brand-black-soft px-4 pb-4">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}
@@ -424,7 +424,7 @@ Create `components/Footer.tsx`:
 ```tsx
 export default function Footer() {
   return (
-    <footer className="bg-brand-blackSoft border-t border-brand-gold/30 mt-16">
+    <footer className="bg-brand-black-soft border-t border-brand-gold/30 mt-16">
       <div className="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm text-gray-300">
         <div>
           <p className="text-brand-red font-bold mb-2">VS MOTORS</p>
@@ -510,7 +510,7 @@ export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
   return (
     <Link
       href={`/estoque/${vehicle.id}`}
-      className="block bg-brand-blackSoft border border-brand-gold/20 rounded-lg overflow-hidden hover:border-brand-red transition-colors"
+      className="block bg-brand-black-soft border border-brand-gold/20 rounded-lg overflow-hidden hover:border-brand-red transition-colors"
     >
       <div className="relative w-full h-48 bg-black">
         <Image
@@ -619,7 +619,7 @@ export default function EstoquePage() {
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-white mb-6">Estoque</h1>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 bg-brand-blackSoft p-4 rounded-lg border border-brand-gold/20">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 bg-brand-black-soft p-4 rounded-lg border border-brand-gold/20">
         <select
           className="bg-black text-white border border-gray-700 rounded px-2 py-2"
           onChange={(e) => update("brand", e.target.value)}
@@ -748,7 +748,7 @@ export default function VehicleDetailPage({ params }: { params: { id: string } }
         {vehicle.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
       </p>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-300 bg-brand-blackSoft border border-brand-gold/20 rounded-lg p-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-300 bg-brand-black-soft border border-brand-gold/20 rounded-lg p-4 mb-6">
         <p><span className="text-brand-gold">Ano:</span> {vehicle.year}</p>
         <p><span className="text-brand-gold">KM:</span> {vehicle.km.toLocaleString("pt-BR")}</p>
         <p><span className="text-brand-gold">Câmbio:</span> {vehicle.transmission === "automatic" ? "Automático" : "Manual"}</p>
@@ -801,7 +801,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <section className="bg-brand-blackSoft border-b border-brand-gold/30 py-20 text-center px-4">
+      <section className="bg-brand-black-soft border-b border-brand-gold/30 py-20 text-center px-4">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
           Encontre o carro <span className="text-brand-red">ideal</span> para você
         </h1>
@@ -826,7 +826,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-brand-blackSoft border-t border-brand-gold/30 py-16 px-4">
+      <section className="bg-brand-black-soft border-t border-brand-gold/30 py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-white mb-4">Por que a VS Motors</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-300">
@@ -964,7 +964,7 @@ export default function ContatoPage() {
         <p><span className="text-brand-gold">Endereço:</span> Av. Exemplo, 1000 — Centro, Cidade - UF, 00000-000</p>
         <p><span className="text-brand-gold">Horário:</span> Segunda a sábado, 9h às 18h</p>
       </div>
-      <div className="w-full h-64 bg-brand-blackSoft border border-brand-gold/20 rounded-lg flex items-center justify-center text-gray-500">
+      <div className="w-full h-64 bg-brand-black-soft border border-brand-gold/20 rounded-lg flex items-center justify-center text-gray-500">
         Mapa (placeholder)
       </div>
     </div>
