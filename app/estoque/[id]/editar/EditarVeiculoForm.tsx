@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { updateVehicleAction, deleteVehicleAction } from "../../actions";
 import VehicleForm from "@/components/VehicleForm";
 import type { Vehicle } from "@/lib/vehicles";
@@ -12,6 +12,7 @@ export default function EditarVeiculoForm({ vehicle }: { vehicle: Vehicle }) {
     async (_prev, formData) => updateVehicleAction(vehicle.id, vehicle.images, formData),
     { error: null }
   );
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   return (
     <>
@@ -25,10 +26,12 @@ export default function EditarVeiculoForm({ vehicle }: { vehicle: Vehicle }) {
 
       <form
         action={async () => {
-          await deleteVehicleAction(vehicle.id);
+          const result = await deleteVehicleAction(vehicle.id);
+          setDeleteError(result.error);
         }}
         className="mt-6"
       >
+        {deleteError && <p className="text-red-600 text-sm mb-2">{deleteError}</p>}
         <button type="submit" className="text-sm text-red-600 font-semibold hover:underline">
           Excluir veículo
         </button>

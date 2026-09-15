@@ -26,7 +26,10 @@ export async function getVehicles(): Promise<Vehicle[]> {
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (error) throw new Error(`Falha ao carregar estoque: ${error.message}`);
+  if (error) {
+    console.error(`Falha ao carregar estoque: ${error.message}`);
+    return [];
+  }
   return (data as VehicleRow[]).map(toVehicle);
 }
 

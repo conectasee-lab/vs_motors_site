@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { validatePhotos, MAX_PHOTOS_PER_VEHICLE } from "@/lib/vehicle-photos";
+import { validatePhotos } from "@/lib/vehicle-photos";
 
 type ActionResult = { error: string | null };
 
@@ -43,6 +43,10 @@ function validateVehicleFields(
   return null;
 }
 
+function sanitizeFileName(name: string): string {
+  return name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
+}
+
 async function uploadPhotos(
   supabase: Awaited<ReturnType<typeof createServerSupabaseClient>>,
   vehicleId: string,
@@ -50,7 +54,7 @@ async function uploadPhotos(
 ): Promise<string[]> {
   const urls: string[] = [];
   for (const file of files) {
-    const path = `${vehicleId}/${Date.now()}-${file.name}`;
+    const path = `${vehicleId}/${Date.now()}-${sanitizeFileName(file.name)}`;
     const { error } = await supabase.storage.from("vehicle-photos").upload(path, file);
     if (error) throw new Error(`Falha ao enviar foto ${file.name}: ${error.message}`);
     const { data } = supabase.storage.from("vehicle-photos").getPublicUrl(path);
@@ -149,4 +153,3 @@ export async function deleteVehicleAction(id: string): Promise<ActionResult> {
   redirect("/estoque");
 }
 
-export { MAX_PHOTOS_PER_VEHICLE };

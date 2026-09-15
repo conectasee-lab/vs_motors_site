@@ -4,8 +4,15 @@ import { useMemo, useState } from "react";
 import { filterVehicles, type VehicleFilters } from "@/lib/vehicles";
 import type { Vehicle } from "@/lib/vehicles";
 import VehicleCard from "@/components/VehicleCard";
+import EmployeeBar from "@/components/EmployeeBar";
 
-export default function EstoqueFilters({ vehicles }: { vehicles: Vehicle[] }) {
+export default function EstoqueFilters({
+  vehicles,
+  isLoggedIn = false,
+}: {
+  vehicles: Vehicle[];
+  isLoggedIn?: boolean;
+}) {
   const brands = Array.from(new Set(vehicles.map((v) => v.brand))).sort();
   const models = Array.from(new Set(vehicles.map((v) => v.model))).sort();
   const fuels = Array.from(new Set(vehicles.map((v) => v.fuel))).sort();
@@ -22,6 +29,8 @@ export default function EstoqueFilters({ vehicles }: { vehicles: Vehicle[] }) {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-white mb-6">Estoque</h1>
+
+      {isLoggedIn && <EmployeeBar />}
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 bg-brand-black-soft p-4 rounded-lg border border-brand-gold/20">
         <select
@@ -98,7 +107,7 @@ export default function EstoqueFilters({ vehicles }: { vehicles: Vehicle[] }) {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {results.map((v) => (
-            <VehicleCard key={v.id} vehicle={v} />
+            <VehicleCard key={v.id} vehicle={v} isLoggedIn={isLoggedIn} />
           ))}
         </div>
       )}

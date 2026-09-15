@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import { getVehicleById } from "@/lib/vehicles-data";
+import { requireUser } from "@/lib/auth";
 import EditarVeiculoForm from "./EditarVeiculoForm";
 
 export default async function EditarVeiculoPage({ params }: { params: Promise<{ id: string }> }) {
+  await requireUser();
   const { id } = await params;
   const vehicle = await getVehicleById(id);
   if (!vehicle) notFound();

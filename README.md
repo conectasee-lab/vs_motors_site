@@ -29,6 +29,13 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Supabase setup
+
+This project stores vehicle stock and employee accounts in Supabase.
+
+1. Run [`supabase/schema.sql`](./supabase/schema.sql) against your Supabase project's SQL Editor to create the `vehicles` table and its Row Level Security policies.
+2. Create a **public** Storage bucket named `vehicle-photos` for vehicle photo uploads.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
