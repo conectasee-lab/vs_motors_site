@@ -14,8 +14,8 @@ export default function Footer() {
         </div>
         <div>
           <p className="text-brand-gold font-semibold mb-2">Endereço</p>
-          <p>Av. Exemplo, 1000 — Centro</p>
-          <p>Cidade - UF, 00000-000</p>
+          <p>Av. Quatorze de Dezembro, 1300</p>
+          <p>Vila Mafalda, Jundiaí - SP, 13206-105</p>
         </div>
       </div>
       <p className="text-center text-xs text-gray-500 py-4">
