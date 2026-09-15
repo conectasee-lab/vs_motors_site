@@ -6,26 +6,28 @@ export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
   return (
     <Link
       href={`/estoque/${vehicle.id}`}
-      className="block bg-brand-black-soft border border-brand-gold/20 rounded-lg overflow-hidden hover:border-brand-red transition-colors"
+      className="group block bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100"
     >
-      <div className="relative w-full h-48 bg-black">
+      <div className="relative w-full h-56 bg-gray-200 overflow-hidden">
         <Image
           src={vehicle.images[0]}
           alt={`${vehicle.brand} ${vehicle.model}`}
           fill
-          className="object-cover"
+          className="object-cover group-hover:scale-105 transition-transform duration-300"
         />
       </div>
-      <div className="p-4">
-        <p className="text-white font-semibold">
+      <div className="p-5">
+        <p className="text-gray-900 font-bold text-lg">
           {vehicle.brand} {vehicle.model}
         </p>
-        <p className="text-gray-400 text-sm">
+        <p className="text-gray-600 text-sm mt-1">
           {vehicle.year} · {vehicle.km.toLocaleString("pt-BR")} km
         </p>
-        <p className="text-brand-red font-bold text-lg mt-2">
-          {vehicle.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
-        </p>
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          <p className="text-blue-600 font-bold text-xl">
+            {vehicle.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+          </p>
+        </div>
       </div>
     </Link>
   );

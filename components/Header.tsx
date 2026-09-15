@@ -17,22 +17,21 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="bg-brand-black border-b border-brand-gold/30 sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/logo.png" alt="VS Motors" width={44} height={44} />
-          <span className="text-brand-red font-bold text-lg">VS MOTORS</span>
+    <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+      <div className="max-w-6xl mx-auto flex items-center justify-between px-4 py-4">
+        <Link href="/" className="flex items-center">
+          <Image src="/logo.png" alt="VS Motors" width={160} height={45} />
         </Link>
 
-        <nav className="hidden md:flex gap-6">
+        <nav className="hidden md:flex gap-8">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`text-sm font-medium pb-1 border-b-2 transition-colors ${
+              className={`text-sm font-semibold pb-2 border-b-2 transition-colors ${
                 pathname === item.href
-                  ? "text-white border-brand-red"
-                  : "text-gray-300 border-transparent hover:text-white"
+                  ? "text-blue-600 border-blue-600"
+                  : "text-gray-700 border-transparent hover:text-blue-600"
               }`}
             >
               {item.label}
@@ -41,7 +40,7 @@ export default function Header() {
         </nav>
 
         <button
-          className="md:hidden text-white"
+          className="md:hidden text-gray-700 text-xl"
           onClick={() => setOpen(!open)}
           aria-label="Abrir menu"
         >
@@ -50,14 +49,14 @@ export default function Header() {
       </div>
 
       {open && (
-        <nav className="md:hidden flex flex-col bg-brand-black-soft px-4 pb-4">
+        <nav className="md:hidden flex flex-col bg-gray-50 px-4 pb-4 border-t border-gray-200">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className={`py-2 text-sm ${
-                pathname === item.href ? "text-brand-red" : "text-gray-300"
+              className={`py-3 text-sm font-medium ${
+                pathname === item.href ? "text-blue-600" : "text-gray-700"
               }`}
             >
               {item.label}
