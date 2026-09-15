@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
       ? [{ protocol: "https", hostname: supabaseHostname, pathname: "/storage/v1/object/public/**" }]
       : [],
   },
+  experimental: {
+    serverActions: {
+      // Up to 14 photos at 5MB each, plus form field overhead.
+      bodySizeLimit: "75mb",
+    },
+  },
 };
 
 export default nextConfig;
