@@ -56,4 +56,52 @@ describe("createVehicleAction", () => {
     expect(result).toEqual({ error: "Máximo de 14 fotos por veículo." });
     expect(fromMock).not.toHaveBeenCalled();
   });
+
+  it("returns a friendly error and deletes the orphaned row when photo upload fails", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    uploadMock.mockResolvedValueOnce({ error: { message: "bucket unreachable" } });
+
+    const deleteEqMock = vi.fn().mockResolvedValue({ error: null });
+    const singleMock = vi.fn().mockResolvedValue({ data: { id: "v1" }, error: null });
+    const selectMock = vi.fn(() => ({ single: singleMock }));
+    const insertMock = vi.fn(() => ({ select: selectMock }));
+
+    fromMock.mockImplementation((table: string) => {
+      expect(table).toBe("vehicles");
+      return {
+        insert: insertMock,
+        delete: () => ({ eq: deleteEqMock }),
+      };
+    });
+
+    const fd = baseFormData();
+    fd.append("photos", new File(["x"], "p1.jpg", { type: "image/jpeg" }));
+
+    const { createVehicleAction } = await import("./actions");
+    const result = await createVehicleAction(fd);
+
+    expect(result).toEqual({
+      error: "Falha ao enviar foto p1.jpg: bucket unreachable",
+    });
+    expect(deleteEqMock).toHaveBeenCalledWith("id", "v1");
+  });
+});
+
+describe("updateVehicleAction", () => {
+  it("returns a friendly error without throwing when photo upload fails", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    uploadMock.mockResolvedValueOnce({ error: { message: "bucket unreachable" } });
+    fromMock.mockReset();
+
+    const fd = baseFormData();
+    fd.append("photos", new File(["x"], "p1.jpg", { type: "image/jpeg" }));
+
+    const { updateVehicleAction } = await import("./actions");
+    const result = await updateVehicleAction("v1", [], fd);
+
+    expect(result).toEqual({
+      error: "Falha ao enviar foto p1.jpg: bucket unreachable",
+    });
+    expect(fromMock).not.toHaveBeenCalled();
+  });
 });

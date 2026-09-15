@@ -79,13 +79,23 @@ export async function createVehicleAction(formData: FormData): Promise<ActionRes
 
   if (insertError) return { error: `Falha ao salvar veículo: ${insertError.message}` };
 
-  const images = photos.length > 0 ? await uploadPhotos(supabase, inserted.id, photos) : [];
-  if (images.length > 0) {
-    const { error: updateError } = await supabase
-      .from("vehicles")
-      .update({ images })
-      .eq("id", inserted.id);
-    if (updateError) return { error: `Falha ao vincular fotos: ${updateError.message}` };
+  try {
+    const images = photos.length > 0 ? await uploadPhotos(supabase, inserted.id, photos) : [];
+    if (images.length > 0) {
+      const { error: updateError } = await supabase
+        .from("vehicles")
+        .update({ images })
+        .eq("id", inserted.id);
+      if (updateError) return { error: `Falha ao vincular fotos: ${updateError.message}` };
+    }
+  } catch (err) {
+    try {
+      await supabase.from("vehicles").delete().eq("id", inserted.id);
+    } catch {
+      // best-effort cleanup; ignore secondary failure
+    }
+    const message = err instanceof Error ? err.message : "Falha ao enviar fotos.";
+    return { error: message };
   }
 
   revalidatePath("/estoque");
@@ -108,7 +118,13 @@ export async function updateVehicleAction(
   if (photoCheck.error) return { error: photoCheck.error };
 
   const supabase = await createServerSupabaseClient();
-  const newImages = photos.length > 0 ? await uploadPhotos(supabase, id, photos) : [];
+  let newImages: string[] = [];
+  try {
+    newImages = photos.length > 0 ? await uploadPhotos(supabase, id, photos) : [];
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Falha ao enviar fotos.";
+    return { error: message };
+  }
 
   const { error } = await supabase
     .from("vehicles")
