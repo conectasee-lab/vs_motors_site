@@ -1,24 +1,24 @@
 export default function Footer() {
   return (
-    <footer className="bg-brand-black-soft border-t border-brand-gold/30 mt-16">
-      <div className="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm text-gray-300">
+    <footer className="bg-brand-black mt-16">
+      <div className="max-w-6xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-3 text-sm text-gray-400">
         <div>
-          <p className="text-brand-red font-bold mb-2">VS MOTORS</p>
-          <p>Qualidade e confiança na hora de comprar seu carro.</p>
+          <p className="text-white font-bold text-lg mb-2">VS Motors</p>
+          <p className="leading-relaxed">Qualidade e confiança na hora de comprar seu carro.</p>
         </div>
         <div>
-          <p className="text-brand-gold font-semibold mb-2">Contato</p>
-          <p>Telefone: (00) 0000-0000</p>
-          <p>WhatsApp: (00) 90000-0000</p>
-          <p>contato@vsmotors.com.br</p>
+          <p className="text-brand-red font-semibold mb-3">Contato</p>
+          <p className="leading-relaxed">Telefone: (00) 0000-0000</p>
+          <p className="leading-relaxed">WhatsApp: (00) 90000-0000</p>
+          <p className="leading-relaxed">contato@vsmotors.com.br</p>
         </div>
         <div>
-          <p className="text-brand-gold font-semibold mb-2">Endereço</p>
-          <p>Av. Quatorze de Dezembro, 1300</p>
-          <p>Vila Mafalda, Jundiaí - SP, 13206-105</p>
+          <p className="text-brand-red font-semibold mb-3">Endereço</p>
+          <p className="leading-relaxed">Av. Quatorze de Dezembro, 1300</p>
+          <p className="leading-relaxed">Vila Mafalda, Jundiaí - SP, 13206-105</p>
         </div>
       </div>
-      <div className="flex items-center justify-center gap-3 py-5">
+      <div className="border-t border-white/10 flex items-center justify-center gap-3 py-5">
         <p className="text-center text-xs text-gray-500">
           © {new Date().getFullYear()} VS Motors. Todos os direitos reservados.
         </p>

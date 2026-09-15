@@ -30,8 +30,8 @@ export default function Header() {
               href={item.href}
               className={`text-sm font-semibold pb-2 border-b-2 transition-colors ${
                 pathname === item.href
-                  ? "text-blue-600 border-blue-600"
-                  : "text-gray-700 border-transparent hover:text-blue-600"
+                  ? "text-brand-red border-brand-red"
+                  : "text-gray-800 border-transparent hover:text-brand-red"
               }`}
             >
               {item.label}
@@ -40,11 +40,14 @@ export default function Header() {
         </nav>
 
         <button
-          className="md:hidden text-gray-700 text-xl"
+          className="md:hidden flex flex-col gap-1.5 w-7"
           onClick={() => setOpen(!open)}
           aria-label="Abrir menu"
+          aria-expanded={open}
         >
-          ☰
+          <span className={`h-0.5 bg-brand-black transition-transform ${open ? "translate-y-2 rotate-45" : ""}`} />
+          <span className={`h-0.5 bg-brand-black transition-opacity ${open ? "opacity-0" : ""}`} />
+          <span className={`h-0.5 bg-brand-black transition-transform ${open ? "-translate-y-2 -rotate-45" : ""}`} />
         </button>
       </div>
 
@@ -56,7 +59,7 @@ export default function Header() {
               href={item.href}
               onClick={() => setOpen(false)}
               className={`py-3 text-sm font-medium ${
-                pathname === item.href ? "text-blue-600" : "text-gray-700"
+                pathname === item.href ? "text-brand-red" : "text-gray-800"
               }`}
             >
               {item.label}

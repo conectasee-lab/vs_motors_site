@@ -10,9 +10,9 @@ export default function VehicleCard({
   isLoggedIn?: boolean;
 }) {
   return (
-    <div className="group relative block bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
+    <div className="group relative block bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-brand-black transition-colors duration-200">
       <Link href={`/estoque/${vehicle.id}`} className="block">
-        <div className="relative w-full h-56 bg-gray-200 overflow-hidden">
+        <div className="relative w-full h-52 bg-brand-black-soft overflow-hidden flex items-center justify-center">
           {vehicle.images.length > 0 ? (
             <Image
               src={vehicle.images[0]}
@@ -21,20 +21,25 @@ export default function VehicleCard({
               className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-400 text-sm">
-              Sem foto
-            </div>
+            <svg
+              viewBox="0 0 64 32"
+              className="w-24 h-auto text-white/15 group-hover:text-brand-red/25 transition-colors duration-300"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M6 22c-3 0-5-2-5-5s2-5 5-5l4-8c1-2 3-3 5-3h18c2 0 4 1 5 3l4 8c3 0 5 2 5 5s-2 5-5 5H6Zm6-14-2 5h10l-2-5H12Zm14 0-2 5h14l-3-5H26Z" />
+            </svg>
           )}
         </div>
         <div className="p-5">
-          <p className="text-gray-900 font-bold text-lg">
+          <p className="text-brand-black font-bold text-lg">
             {vehicle.brand} {vehicle.model}
           </p>
-          <p className="text-gray-600 text-sm mt-1">
+          <p className="text-gray-500 text-sm mt-1">
             {vehicle.year} · {vehicle.km.toLocaleString("pt-BR")} km
           </p>
           <div className="mt-4 pt-4 border-t border-gray-100">
-            <p className="text-blue-600 font-bold text-xl">
+            <p className="text-brand-red font-bold text-xl">
               {vehicle.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
             </p>
           </div>
