@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { vehicles } from "@/lib/vehicles";
+import { getVehicles } from "@/lib/vehicles-data";
 import VehicleCard from "@/components/VehicleCard";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const vehicles = await getVehicles();
   const highlights = vehicles.slice(0, 3);
 
   return (

@@ -1,11 +1,11 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { vehicles } from "@/lib/vehicles";
+import { getVehicleById } from "@/lib/vehicles-data";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default async function VehicleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const vehicle = vehicles.find((v) => v.id === id);
+  const vehicle = await getVehicleById(id);
   if (!vehicle) notFound();
 
   return (
