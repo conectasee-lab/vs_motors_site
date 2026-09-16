@@ -2,17 +2,19 @@
 
 import { useState } from "react";
 import type { Vehicle } from "@/lib/vehicles";
+import type { Brand } from "@/lib/brands";
 import { MAX_PHOTOS_PER_VEHICLE } from "@/lib/vehicle-photos";
 
 type Props = {
   action: (formData: FormData) => void;
   vehicle?: Vehicle;
+  brands: Brand[];
   existingPhotoCount?: number;
   pending: boolean;
   error: string | null;
 };
 
-export default function VehicleForm({ action, vehicle, existingPhotoCount = 0, pending, error }: Props) {
+export default function VehicleForm({ action, vehicle, brands, existingPhotoCount = 0, pending, error }: Props) {
   const [photoCount, setPhotoCount] = useState(0);
   const remaining = MAX_PHOTOS_PER_VEHICLE - existingPhotoCount - photoCount;
 
@@ -21,7 +23,12 @@ export default function VehicleForm({ action, vehicle, existingPhotoCount = 0, p
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Marca</label>
-          <input name="brand" defaultValue={vehicle?.brand} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" />
+          <select name="brand_id" defaultValue={vehicle?.brand?.id ?? ""} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+            <option value="">Selecione uma marca</option>
+            {brands.map((b) => (
+              <option key={b.id} value={b.id}>{b.name}</option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Modelo</label>

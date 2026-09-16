@@ -1,21 +1,15 @@
-"use client";
+import { requireUser } from "@/lib/auth";
+import { getBrands } from "@/lib/brands";
+import NovoVeiculoForm from "./NovoVeiculoForm";
 
-import { useActionState } from "react";
-import { createVehicleAction } from "../actions";
-import VehicleForm from "@/components/VehicleForm";
-
-type State = { error: string | null };
-
-export default function NovoVeiculoPage() {
-  const [state, formAction, pending] = useActionState<State, FormData>(
-    async (_prev, formData) => createVehicleAction(formData),
-    { error: null }
-  );
+export default async function NovoVeiculoPage() {
+  await requireUser();
+  const brands = await getBrands();
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-brand-black mb-6">Cadastrar veículo</h1>
-      <VehicleForm action={formAction} pending={pending} error={state.error} />
+      <NovoVeiculoForm brands={brands} />
     </div>
   );
 }

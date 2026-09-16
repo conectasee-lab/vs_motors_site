@@ -4,10 +4,11 @@ import { useActionState, useState } from "react";
 import { updateVehicleAction, deleteVehicleAction } from "../../actions";
 import VehicleForm from "@/components/VehicleForm";
 import type { Vehicle } from "@/lib/vehicles";
+import type { Brand } from "@/lib/brands";
 
 type State = { error: string | null };
 
-export default function EditarVeiculoForm({ vehicle }: { vehicle: Vehicle }) {
+export default function EditarVeiculoForm({ vehicle, brands }: { vehicle: Vehicle; brands: Brand[] }) {
   const [state, formAction, pending] = useActionState<State, FormData>(
     async (_prev, formData) => updateVehicleAction(vehicle.id, vehicle.images, formData),
     { error: null }
@@ -19,6 +20,7 @@ export default function EditarVeiculoForm({ vehicle }: { vehicle: Vehicle }) {
       <VehicleForm
         action={formAction}
         vehicle={vehicle}
+        brands={brands}
         existingPhotoCount={vehicle.images.length}
         pending={pending}
         error={state.error}
