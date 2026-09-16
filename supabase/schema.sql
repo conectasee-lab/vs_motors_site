@@ -62,3 +62,60 @@ create policy "authenticated users can delete vehicle photos"
   on storage.objects for delete
   to authenticated
   using (bucket_id = 'vehicle-photos');
+
+-- Brands: CRUD entity for vehicle brands (name + logo), linked from vehicles.
+
+create table if not exists brands (
+  id uuid primary key default gen_random_uuid(),
+  name text not null unique,
+  logo_url text,
+  created_at timestamptz not null default now()
+);
+
+alter table brands enable row level security;
+
+create policy "public can read brands"
+  on brands for select
+  using (true);
+
+create policy "authenticated users can insert brands"
+  on brands for insert
+  to authenticated
+  with check (true);
+
+create policy "authenticated users can update brands"
+  on brands for update
+  to authenticated
+  using (true);
+
+create policy "authenticated users can delete brands"
+  on brands for delete
+  to authenticated
+  using (true);
+
+alter table vehicles
+  drop column if exists brand,
+  add column if not exists brand_id uuid references brands(id);
+
+-- Storage: the "brand-logos" bucket must be created manually (Storage ->
+-- New bucket -> name "brand-logos" -> Public bucket), same as vehicle-photos.
+
+create policy "public can view brand logos"
+  on storage.objects for select
+  to public
+  using (bucket_id = 'brand-logos');
+
+create policy "authenticated users can upload brand logos"
+  on storage.objects for insert
+  to authenticated
+  with check (bucket_id = 'brand-logos');
+
+create policy "authenticated users can update brand logos"
+  on storage.objects for update
+  to authenticated
+  using (bucket_id = 'brand-logos');
+
+create policy "authenticated users can delete brand logos"
+  on storage.objects for delete
+  to authenticated
+  using (bucket_id = 'brand-logos');
