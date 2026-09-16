@@ -23,7 +23,7 @@ vi.mock("next/navigation", () => ({ redirect: vi.fn() }));
 
 function baseFormData() {
   const fd = new FormData();
-  fd.set("brand_id", "1");
+  fd.set("brand_id", "b1");
   fd.set("model", "Corolla");
   fd.set("year", "2021");
   fd.set("price", "112000");
@@ -103,5 +103,28 @@ describe("updateVehicleAction", () => {
       error: "Falha ao enviar foto p1.jpg: bucket unreachable",
     });
     expect(fromMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("createVehicleAction field parsing", () => {
+  it("saves brand_id as null when no brand is selected", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    const singleMock = vi.fn().mockResolvedValue({ data: { id: "v1" }, error: null });
+    const selectMock = vi.fn(() => ({ single: singleMock }));
+    const insertMock = vi.fn(() => ({ select: selectMock }));
+    fromMock.mockImplementation((table: string) => {
+      expect(table).toBe("vehicles");
+      return { insert: insertMock };
+    });
+
+    const { createVehicleAction } = await import("./actions");
+    const fd = baseFormData();
+    fd.set("brand_id", "");
+
+    await createVehicleAction(fd);
+
+    expect(insertMock).toHaveBeenCalledWith(
+      expect.objectContaining({ brand_id: null }),
+    );
   });
 });
