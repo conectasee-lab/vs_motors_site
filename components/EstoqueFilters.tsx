@@ -55,12 +55,12 @@ function RadioOption({
 
 function BrandCarousel({
   brands,
-  activeBrand,
+  activeBrandId,
   onSelect,
 }: {
-  brands: string[];
-  activeBrand: string | undefined;
-  onSelect: (brand: string | undefined) => void;
+  brands: { id: string; name: string }[];
+  activeBrandId: string | undefined;
+  onSelect: (brandId: string | undefined) => void;
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
 
@@ -85,28 +85,27 @@ function BrandCarousel({
         <button
           onClick={() => onSelect(undefined)}
           className={`shrink-0 w-24 flex flex-col items-center gap-2 px-3 py-3 rounded-lg border transition-colors ${
-            !activeBrand ? "border-brand-red bg-red-50" : "border-gray-200 bg-white hover:border-gray-300"
+            !activeBrandId ? "border-brand-red bg-red-50" : "border-gray-200 bg-white hover:border-gray-300"
           }`}
         >
-          <span className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold ${!activeBrand ? "bg-brand-red text-white" : "bg-gray-100 text-gray-500"}`}>
+          <span className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold ${!activeBrandId ? "bg-brand-red text-white" : "bg-gray-100 text-gray-500"}`}>
             todas
           </span>
-          <span className={`text-xs font-medium truncate w-full text-center ${!activeBrand ? "text-brand-black" : "text-gray-600"}`}>Todas</span>
+          <span className={`text-xs font-medium truncate w-full text-center ${!activeBrandId ? "text-brand-black" : "text-gray-600"}`}>Todas</span>
         </button>
 
         {brands.map((b) => (
           <button
-            key={b}
-            onClick={() => onSelect(b)}
+            key={b.id}
+            onClick={() => onSelect(b.id)}
             className={`shrink-0 w-24 flex flex-col items-center gap-2 px-3 py-3 rounded-lg border transition-colors ${
-              activeBrand === b ? "border-brand-red bg-red-50" : "border-gray-200 bg-white hover:border-gray-300"
+              activeBrandId === b.id ? "border-brand-red bg-red-50" : "border-gray-200 bg-white hover:border-gray-300"
             }`}
           >
-            {/* Espaço reservado para o logo da marca, cadastrado futuramente */}
-            <span className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold ${activeBrand === b ? "bg-brand-red text-white" : "bg-gray-100 text-gray-500"}`}>
-              {b.charAt(0)}
+            <span className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold ${activeBrandId === b.id ? "bg-brand-red text-white" : "bg-gray-100 text-gray-500"}`}>
+              {b.name.charAt(0)}
             </span>
-            <span className={`text-xs font-medium truncate w-full text-center ${activeBrand === b ? "text-brand-black" : "text-gray-600"}`}>{b}</span>
+            <span className={`text-xs font-medium truncate w-full text-center ${activeBrandId === b.id ? "text-brand-black" : "text-gray-600"}`}>{b.name}</span>
           </button>
         ))}
       </div>
@@ -129,7 +128,13 @@ export default function EstoqueFilters({
   vehicles: Vehicle[];
   isLoggedIn?: boolean;
 }) {
-  const brands = Array.from(new Set(vehicles.map((v) => v.brand))).sort();
+  const brandOptions = Array.from(
+    new Map(
+      vehicles
+        .filter((v) => v.brand)
+        .map((v) => [v.brand!.id, v.brand!])
+    ).values()
+  ).sort((a, b) => a.name.localeCompare(b.name));
   const models = Array.from(new Set(vehicles.map((v) => v.model))).sort();
   const fuels = Array.from(new Set(vehicles.map((v) => v.fuel))).sort();
   const colors = Array.from(new Set(vehicles.map((v) => v.color))).sort();
@@ -157,7 +162,7 @@ export default function EstoqueFilters({
     const base = filterVehicles(vehicles, filters);
     if (!search.trim()) return base;
     const q = search.trim().toLowerCase();
-    return base.filter((v) => `${v.brand} ${v.model}`.toLowerCase().includes(q));
+    return base.filter((v) => `${v.brand?.name ?? ""} ${v.model}`.toLowerCase().includes(q));
   }, [vehicles, filters, search]);
 
   const activeFilterCount = Object.values(filters).filter((v) => v !== undefined).length;
@@ -176,19 +181,19 @@ export default function EstoqueFilters({
       <FilterGroup title="Marca">
         <RadioOption
           name="brand"
-          checked={!filters.brand}
-          onChange={() => update("brand", undefined)}
+          checked={!filters.brandId}
+          onChange={() => update("brandId", undefined)}
           label="Todas"
-          count={countBy("brand", undefined, { ...filters, brand: undefined })}
+          count={countBy("brandId", undefined, { ...filters, brandId: undefined })}
         />
-        {brands.map((b) => (
+        {brandOptions.map((b) => (
           <RadioOption
-            key={b}
+            key={b.id}
             name="brand"
-            checked={filters.brand === b}
-            onChange={() => update("brand", b)}
-            label={b}
-            count={countBy("brand", b, { ...filters, brand: undefined })}
+            checked={filters.brandId === b.id}
+            onChange={() => update("brandId", b.id)}
+            label={b.name}
+            count={countBy("brandId", b.id, { ...filters, brandId: undefined })}
           />
         ))}
       </FilterGroup>
@@ -318,7 +323,7 @@ export default function EstoqueFilters({
 
         {isLoggedIn && <EmployeeBar />}
 
-        <BrandCarousel brands={brands} activeBrand={filters.brand} onSelect={(b) => update("brand", b)} />
+        <BrandCarousel brands={brandOptions} activeBrandId={filters.brandId} onSelect={(id) => update("brandId", id)} />
 
         <div className="flex gap-3 mb-6">
           <div className="relative flex-1">

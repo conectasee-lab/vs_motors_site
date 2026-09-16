@@ -16,7 +16,7 @@ export default function VehicleCard({
           {vehicle.images.length > 0 ? (
             <Image
               src={vehicle.images[0]}
-              alt={`${vehicle.brand} ${vehicle.model}`}
+              alt={`${vehicle.brand?.name ?? ""} ${vehicle.model}`.trim()}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
@@ -33,7 +33,7 @@ export default function VehicleCard({
         </div>
         <div className="p-5">
           <p className="text-brand-black font-bold text-lg">
-            {vehicle.brand} {vehicle.model}
+            {vehicle.brand?.name ? `${vehicle.brand.name} ` : ""}{vehicle.model}
           </p>
           <p className="text-gray-500 text-sm mt-1">
             {vehicle.year} · {vehicle.km.toLocaleString("pt-BR")} km

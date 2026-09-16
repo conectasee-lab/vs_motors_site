@@ -17,7 +17,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
         {vehicle.images.length > 0 ? (
           <Image
             src={vehicle.images[0]}
-            alt={`${vehicle.brand} ${vehicle.model}`}
+            alt={`${vehicle.brand?.name ?? ""} ${vehicle.model}`.trim()}
             fill
             className="object-cover"
           />
@@ -30,7 +30,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-3xl font-bold text-white">
-          {vehicle.brand} {vehicle.model} {vehicle.year}
+          {vehicle.brand?.name ? `${vehicle.brand.name} ` : ""}{vehicle.model} {vehicle.year}
         </h1>
         {isLoggedIn && (
           <Link

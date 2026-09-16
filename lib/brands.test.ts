@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 
 const orderMock = vi.fn();
-const selectMock = vi.fn(() => ({ order: orderMock }));
+const selectMock = vi.fn((_columns: string) => ({ order: orderMock }));
 const eqMock = vi.fn();
 const maybeSingleMock = vi.fn();
 const fromMock = vi.fn(() => ({

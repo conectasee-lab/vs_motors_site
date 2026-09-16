@@ -8,7 +8,7 @@ export default function WhatsAppButton({
   phoneNumber?: string;
 }) {
   const message = encodeURIComponent(
-    `Olá! Tenho interesse no ${vehicle.brand} ${vehicle.model} ${vehicle.year} anunciado no site da VS Motors.`
+    `Olá! Tenho interesse no ${vehicle.brand?.name ? vehicle.brand.name + " " : ""}${vehicle.model} ${vehicle.year} anunciado no site da VS Motors.`
   );
   const href = `https://wa.me/${phoneNumber}?text=${message}`;
 
