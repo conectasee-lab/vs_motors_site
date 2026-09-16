@@ -32,7 +32,10 @@ export default function VehicleCard({
           )}
         </div>
         <div className="p-5">
-          <p className="text-brand-black font-bold text-lg">
+          <p className="text-brand-black font-bold text-lg flex items-center gap-2">
+            {vehicle.brand?.logoUrl && (
+              <Image src={vehicle.brand.logoUrl} alt={vehicle.brand.name} width={20} height={20} className="object-contain shrink-0" />
+            )}
             {vehicle.brand?.name ? `${vehicle.brand.name} ` : ""}{vehicle.model}
           </p>
           <p className="text-gray-500 text-sm mt-1">

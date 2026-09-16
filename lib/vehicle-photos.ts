@@ -4,6 +4,10 @@ export const ALLOWED_PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 type IncomingFile = { name: string; type: string; size: number };
 
+export function sanitizeFileName(name: string): string {
+  return name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
+}
+
 export function validatePhotos(
   existingCount: number,
   incoming: IncomingFile[]

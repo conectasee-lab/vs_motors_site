@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import { filterVehicles, type VehicleFilters, type Vehicle } from "@/lib/vehicles";
 import VehicleCard from "@/components/VehicleCard";
 import EmployeeBar from "@/components/EmployeeBar";
@@ -58,7 +59,7 @@ function BrandCarousel({
   activeBrandId,
   onSelect,
 }: {
-  brands: { id: string; name: string }[];
+  brands: { id: string; name: string; logoUrl: string | null }[];
   activeBrandId: string | undefined;
   onSelect: (brandId: string | undefined) => void;
 }) {
@@ -102,9 +103,15 @@ function BrandCarousel({
               activeBrandId === b.id ? "border-brand-red bg-red-50" : "border-gray-200 bg-white hover:border-gray-300"
             }`}
           >
-            <span className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold ${activeBrandId === b.id ? "bg-brand-red text-white" : "bg-gray-100 text-gray-500"}`}>
-              {b.name.charAt(0)}
-            </span>
+            {b.logoUrl ? (
+              <span className="w-9 h-9 rounded-full flex items-center justify-center overflow-hidden bg-white border border-gray-200">
+                <Image src={b.logoUrl} alt={b.name} width={24} height={24} className="object-contain" />
+              </span>
+            ) : (
+              <span className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold ${activeBrandId === b.id ? "bg-brand-red text-white" : "bg-gray-100 text-gray-500"}`}>
+                {b.name.charAt(0)}
+              </span>
+            )}
             <span className={`text-xs font-medium truncate w-full text-center ${activeBrandId === b.id ? "text-brand-black" : "text-gray-600"}`}>{b.name}</span>
           </button>
         ))}

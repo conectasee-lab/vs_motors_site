@@ -29,7 +29,10 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
       </div>
 
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-white">
+        <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+          {vehicle.brand?.logoUrl && (
+            <Image src={vehicle.brand.logoUrl} alt={vehicle.brand.name} width={32} height={32} className="object-contain shrink-0" />
+          )}
           {vehicle.brand?.name ? `${vehicle.brand.name} ` : ""}{vehicle.model} {vehicle.year}
         </h1>
         {isLoggedIn && (

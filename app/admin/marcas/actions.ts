@@ -4,12 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { validatePhotos, sanitizeFileName } from "@/lib/vehicle-photos";
 
 type ActionResult = { error: string | null };
-
-function sanitizeFileName(name: string): string {
-  return name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
-}
 
 async function uploadLogo(
   supabase: Awaited<ReturnType<typeof createServerSupabaseClient>>,
@@ -37,6 +34,11 @@ export async function createBrandAction(formData: FormData): Promise<ActionResul
 
   const logo = formData.get("logo");
   const logoFile = logo instanceof File && logo.size > 0 ? logo : null;
+
+  if (logoFile) {
+    const photoCheck = validatePhotos(0, [{ name: logoFile.name, type: logoFile.type, size: logoFile.size }]);
+    if (photoCheck.error) return { error: photoCheck.error };
+  }
 
   const supabase = await createServerSupabaseClient();
 
@@ -69,6 +71,11 @@ export async function updateBrandAction(
 
   const logo = formData.get("logo");
   const logoFile = logo instanceof File && logo.size > 0 ? logo : null;
+
+  if (logoFile) {
+    const photoCheck = validatePhotos(0, [{ name: logoFile.name, type: logoFile.type, size: logoFile.size }]);
+    if (photoCheck.error) return { error: photoCheck.error };
+  }
 
   const supabase = await createServerSupabaseClient();
 

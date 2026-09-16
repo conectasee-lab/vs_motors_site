@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { validatePhotos } from "@/lib/vehicle-photos";
+import { validatePhotos, sanitizeFileName } from "@/lib/vehicle-photos";
 
 type ActionResult = { error: string | null };
 
@@ -42,10 +42,6 @@ function validateVehicleFields(
     return "Câmbio inválido.";
   }
   return null;
-}
-
-function sanitizeFileName(name: string): string {
-  return name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
 }
 
 async function uploadPhotos(
