@@ -9,8 +9,9 @@ import { validatePhotos } from "@/lib/vehicle-photos";
 type ActionResult = { error: string | null };
 
 function parseVehicleFields(formData: FormData) {
+  const brandIdValue = formData.get("brand_id");
   return {
-    brand: String(formData.get("brand") ?? "").trim(),
+    brand_id: brandIdValue ? String(brandIdValue).trim() : null,
     model: String(formData.get("model") ?? "").trim(),
     year: Number(formData.get("year")),
     price: Number(formData.get("price")),
@@ -25,7 +26,7 @@ function parseVehicleFields(formData: FormData) {
 function validateVehicleFields(
   fields: ReturnType<typeof parseVehicleFields>
 ): string | null {
-  if (!fields.brand || !fields.model || !fields.fuel || !fields.color) {
+  if (!fields.brand_id || !fields.model || !fields.fuel || !fields.color) {
     return "Preencha todos os campos obrigatórios.";
   }
   if (!Number.isFinite(fields.year) || fields.year < 1900) {

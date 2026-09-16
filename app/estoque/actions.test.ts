@@ -23,7 +23,7 @@ vi.mock("next/navigation", () => ({ redirect: vi.fn() }));
 
 function baseFormData() {
   const fd = new FormData();
-  fd.set("brand", "Toyota");
+  fd.set("brand_id", "1");
   fd.set("model", "Corolla");
   fd.set("year", "2021");
   fd.set("price", "112000");
