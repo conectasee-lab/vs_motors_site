@@ -16,6 +16,12 @@ export default function EmployeeBar() {
       >
         Gerenciar usuários
       </Link>
+      <Link
+        href="/admin/marcas"
+        className="text-sm font-semibold text-white border border-brand-gold/40 px-4 py-2 rounded hover:bg-brand-black-soft transition-colors"
+      >
+        Gerenciar marcas
+      </Link>
       <form action={logoutAction} className="ml-auto">
         <button
           type="submit"
