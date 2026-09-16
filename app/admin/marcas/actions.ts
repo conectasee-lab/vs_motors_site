@@ -55,7 +55,6 @@ export async function createBrandAction(formData: FormData): Promise<ActionResul
 
   revalidatePath("/admin/marcas");
   redirect("/admin/marcas");
-  return { error: null };
 }
 
 export async function updateBrandAction(
@@ -88,7 +87,6 @@ export async function updateBrandAction(
 
   revalidatePath("/admin/marcas");
   redirect("/admin/marcas");
-  return { error: null };
 }
 
 export async function deleteBrandAction(id: string): Promise<ActionResult> {
@@ -111,5 +109,4 @@ export async function deleteBrandAction(id: string): Promise<ActionResult> {
 
   revalidatePath("/admin/marcas");
   redirect("/admin/marcas");
-  return { error: null };
 }

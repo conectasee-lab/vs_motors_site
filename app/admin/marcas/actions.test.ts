@@ -19,7 +19,11 @@ vi.mock("@/lib/supabase/server", () => ({
 }));
 
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
-vi.mock("next/navigation", () => ({ redirect: vi.fn() }));
+vi.mock("next/navigation", () => ({
+  redirect: vi.fn(() => {
+    throw new Error("NEXT_REDIRECT");
+  }),
+}));
 
 describe("createBrandAction", () => {
   it("returns an error and never touches the database when there is no session", async () => {
@@ -54,13 +58,14 @@ describe("createBrandAction", () => {
     });
 
     const { createBrandAction } = await import("./actions");
+    const { redirect } = await import("next/navigation");
     const fd = new FormData();
     fd.set("name", "Toyota");
 
-    const result = await createBrandAction(fd);
+    await expect(createBrandAction(fd)).rejects.toThrow("NEXT_REDIRECT");
 
-    expect(result).toEqual({ error: null });
     expect(insertMock).toHaveBeenCalledWith({ name: "Toyota", logo_url: null });
+    expect(redirect).toHaveBeenCalledWith("/admin/marcas");
   });
 
   it("returns a friendly error when the name is already taken", async () => {
@@ -113,9 +118,11 @@ describe("deleteBrandAction", () => {
     });
 
     const { deleteBrandAction } = await import("./actions");
-    const result = await deleteBrandAction("b1");
+    const { redirect } = await import("next/navigation");
 
-    expect(result).toEqual({ error: null });
+    await expect(deleteBrandAction("b1")).rejects.toThrow("NEXT_REDIRECT");
+
     expect(deleteEqMock).toHaveBeenCalledWith("id", "b1");
+    expect(redirect).toHaveBeenCalledWith("/admin/marcas");
   });
 });
