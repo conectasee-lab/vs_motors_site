@@ -2,10 +2,10 @@ import type { Vehicle } from "@/lib/vehicles";
 
 export default function WhatsAppButton({
   vehicle,
-  phoneNumber = "5500000000000",
+  phoneNumber,
 }: {
   vehicle: Vehicle;
-  phoneNumber?: string;
+  phoneNumber: string;
 }) {
   const message = encodeURIComponent(
     `Olá! Tenho interesse no ${vehicle.brand?.name ? vehicle.brand.name + " " : ""}${vehicle.model} ${vehicle.year} anunciado no site da VS Motors.`

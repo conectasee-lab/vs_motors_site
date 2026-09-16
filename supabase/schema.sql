@@ -140,3 +140,31 @@ create policy "authenticated users can delete brand logos"
   on storage.objects for delete
   to authenticated
   using (bucket_id = 'brand-logos');
+
+-- Company contact: singleton row (whatsapp, email, address) shown on
+-- /contato, the footer and the vehicle WhatsApp button. The `check (id)`
+-- constraint on a boolean primary key enforces at most one row.
+
+create table if not exists company_contact (
+  id boolean primary key default true,
+  whatsapp text not null default '',
+  email text not null default '',
+  address text not null default '',
+  updated_at timestamptz not null default now(),
+  constraint company_contact_singleton check (id)
+);
+
+alter table company_contact drop column if exists phone;
+
+insert into company_contact (id) values (true) on conflict (id) do nothing;
+
+alter table company_contact enable row level security;
+
+create policy "public can read company contact"
+  on company_contact for select
+  using (true);
+
+create policy "authenticated users can update company contact"
+  on company_contact for update
+  to authenticated
+  using (true);

@@ -1,4 +1,8 @@
-export default function Footer() {
+import { getCompanyContact } from "@/lib/company-contact";
+
+export default async function Footer() {
+  const contact = await getCompanyContact();
+
   return (
     <footer className="bg-brand-black mt-16">
       <div className="max-w-6xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-3 text-sm text-gray-400">
@@ -8,14 +12,12 @@ export default function Footer() {
         </div>
         <div>
           <p className="text-brand-red font-semibold mb-3">Contato</p>
-          <p className="leading-relaxed">Telefone: (00) 0000-0000</p>
-          <p className="leading-relaxed">WhatsApp: (00) 90000-0000</p>
-          <p className="leading-relaxed">contato@vsmotors.com.br</p>
+          <p className="leading-relaxed">WhatsApp: {contact.whatsapp}</p>
+          <p className="leading-relaxed">{contact.email}</p>
         </div>
         <div>
           <p className="text-brand-red font-semibold mb-3">Endereço</p>
-          <p className="leading-relaxed">Av. Quatorze de Dezembro, 1300</p>
-          <p className="leading-relaxed">Vila Mafalda, Jundiaí - SP, 13206-105</p>
+          <p className="leading-relaxed">{contact.address}</p>
         </div>
       </div>
       <div className="border-t border-white/10 flex items-center justify-center gap-3 py-5">

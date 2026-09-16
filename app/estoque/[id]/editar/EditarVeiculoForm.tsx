@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, useTransition } from "react";
 import { updateVehicleAction, deleteVehicleAction } from "../../actions";
 import VehicleForm from "@/components/VehicleForm";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import type { Vehicle } from "@/lib/vehicles";
 import type { Brand } from "@/lib/brands";
 
@@ -14,6 +15,18 @@ export default function EditarVeiculoForm({ vehicle, brands }: { vehicle: Vehicl
     { error: null }
   );
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [isDeleting, startDeleteTransition] = useTransition();
+
+  function handleConfirmDelete() {
+    startDeleteTransition(async () => {
+      const result = await deleteVehicleAction(vehicle.id);
+      setDeleteError(result.error);
+      if (!result.error) {
+        setConfirmOpen(false);
+      }
+    });
+  }
 
   return (
     <>
@@ -26,18 +39,26 @@ export default function EditarVeiculoForm({ vehicle, brands }: { vehicle: Vehicl
         error={state.error}
       />
 
-      <form
-        action={async () => {
-          const result = await deleteVehicleAction(vehicle.id);
-          setDeleteError(result.error);
-        }}
-        className="mt-6"
-      >
+      <div className="mt-6">
         {deleteError && <p className="text-red-600 text-sm mb-2">{deleteError}</p>}
-        <button type="submit" className="text-sm text-red-600 font-semibold hover:underline">
+        <button
+          type="button"
+          onClick={() => setConfirmOpen(true)}
+          className="text-sm text-red-600 font-semibold hover:underline"
+        >
           Excluir veículo
         </button>
-      </form>
+      </div>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Excluir veículo"
+        description="Tem certeza que deseja excluir este veículo? Essa ação não pode ser desfeita."
+        confirmLabel="Excluir"
+        pending={isDeleting}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setConfirmOpen(false)}
+      />
     </>
   );
 }
