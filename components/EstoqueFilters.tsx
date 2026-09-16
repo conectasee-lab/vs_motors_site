@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { filterVehicles, type VehicleFilters, type Vehicle } from "@/lib/vehicles";
+import type { Brand } from "@/lib/brands";
 import VehicleCard from "@/components/VehicleCard";
 import EmployeeBar from "@/components/EmployeeBar";
 
@@ -130,18 +131,14 @@ function BrandCarousel({
 
 export default function EstoqueFilters({
   vehicles,
+  brands,
   isLoggedIn = false,
 }: {
   vehicles: Vehicle[];
+  brands: Brand[];
   isLoggedIn?: boolean;
 }) {
-  const brandOptions = Array.from(
-    new Map(
-      vehicles
-        .filter((v) => v.brand)
-        .map((v) => [v.brand!.id, v.brand!])
-    ).values()
-  ).sort((a, b) => a.name.localeCompare(b.name));
+  const brandOptions = brands;
   const models = Array.from(new Set(vehicles.map((v) => v.model))).sort();
   const fuels = Array.from(new Set(vehicles.map((v) => v.fuel))).sort();
   const colors = Array.from(new Set(vehicles.map((v) => v.color))).sort();
