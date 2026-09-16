@@ -93,8 +93,29 @@ create policy "authenticated users can delete brands"
   to authenticated
   using (true);
 
+-- Before running this block, snapshot old values for manual reference:
+--   select id, brand from vehicles;
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_name = 'vehicles' and column_name = 'brand'
+  ) and not exists (
+    select 1 from information_schema.columns
+    where table_name = 'vehicles' and column_name = 'legacy_brand'
+  ) then
+    alter table vehicles rename column brand to legacy_brand;
+  end if;
+
+  if exists (
+    select 1 from information_schema.columns
+    where table_name = 'vehicles' and column_name = 'legacy_brand'
+  ) then
+    alter table vehicles alter column legacy_brand drop not null;
+  end if;
+end $$;
+
 alter table vehicles
-  drop column if exists brand,
   add column if not exists brand_id uuid references brands(id);
 
 -- Storage: the "brand-logos" bucket must be created manually (Storage ->
