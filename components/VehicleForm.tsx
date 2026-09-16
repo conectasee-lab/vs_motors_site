@@ -23,7 +23,7 @@ export default function VehicleForm({ action, vehicle, brands, existingPhotoCoun
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Marca</label>
-          <select name="brand_id" defaultValue={vehicle?.brand?.id ?? ""} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+          <select name="brand_id" defaultValue={vehicle?.brand?.id ?? ""} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900">
             <option value="">Selecione uma marca</option>
             {brands.map((b) => (
               <option key={b.id} value={b.id}>{b.name}</option>
@@ -32,40 +32,40 @@ export default function VehicleForm({ action, vehicle, brands, existingPhotoCoun
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Modelo</label>
-          <input name="model" defaultValue={vehicle?.model} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" />
+          <input name="model" defaultValue={vehicle?.model} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900" />
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Ano</label>
-          <input name="year" type="number" defaultValue={vehicle?.year} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" />
+          <input name="year" type="number" defaultValue={vehicle?.year} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900" />
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Preço</label>
-          <input name="price" type="number" step="0.01" defaultValue={vehicle?.price} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" />
+          <input name="price" type="number" step="0.01" defaultValue={vehicle?.price} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900" />
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">KM</label>
-          <input name="km" type="number" defaultValue={vehicle?.km} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" />
+          <input name="km" type="number" defaultValue={vehicle?.km} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900" />
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Câmbio</label>
-          <select name="transmission" defaultValue={vehicle?.transmission ?? "automatic"} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+          <select name="transmission" defaultValue={vehicle?.transmission ?? "automatic"} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900">
             <option value="automatic">Automático</option>
             <option value="manual">Manual</option>
           </select>
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Combustível</label>
-          <input name="fuel" defaultValue={vehicle?.fuel} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" />
+          <input name="fuel" defaultValue={vehicle?.fuel} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900" />
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Cor</label>
-          <input name="color" defaultValue={vehicle?.color} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" />
+          <input name="color" defaultValue={vehicle?.color} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900" />
         </div>
       </div>
 
       <div>
         <label className="block text-sm font-semibold text-gray-700 mb-1">Descrição</label>
-        <textarea name="description" defaultValue={vehicle?.description} rows={4} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" />
+        <textarea name="description" defaultValue={vehicle?.description} rows={4} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900" />
       </div>
 
       <div>
@@ -78,7 +78,7 @@ export default function VehicleForm({ action, vehicle, brands, existingPhotoCoun
           accept="image/jpeg,image/png,image/webp"
           multiple
           onChange={(e) => setPhotoCount(e.target.files?.length ?? 0)}
-          className="w-full text-sm"
+          className="w-full text-sm text-gray-700"
         />
       </div>
 

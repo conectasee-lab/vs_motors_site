@@ -29,7 +29,7 @@ export default function BrandForm({ action, brand, pending, error }: Props) {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={brand.logoUrl} alt={brand.name} className="w-16 h-16 object-contain mb-2 border border-gray-200 rounded" />
         )}
-        <input name="logo" type="file" accept="image/jpeg,image/png,image/webp" className="w-full text-sm" />
+        <input name="logo" type="file" accept="image/jpeg,image/png,image/webp" className="w-full text-sm text-gray-700" />
       </div>
 
       {error && <p className="text-sm text-red-600">{error}</p>}

@@ -13,9 +13,11 @@ export default function NovaMarcaPage() {
   );
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-brand-black mb-6">Cadastrar marca</h1>
-      <BrandForm action={formAction} pending={pending} error={state.error} />
+    <div className="min-h-screen w-full bg-gray-50">
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold text-brand-black mb-6">Cadastrar marca</h1>
+        <BrandForm action={formAction} pending={pending} error={state.error} />
+      </div>
     </div>
   );
 }

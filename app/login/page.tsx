@@ -9,7 +9,8 @@ export default function LoginPage() {
   const [state, formAction, pending] = useActionState(loginAction, initialState);
 
   return (
-    <div className="max-w-sm mx-auto px-4 py-16">
+    <div className="min-h-screen w-full bg-gray-50">
+      <div className="max-w-sm mx-auto px-4 py-16">
       <h1 className="text-2xl font-bold text-brand-black mb-6">Área do funcionário</h1>
 
       <form action={formAction} className="space-y-4">
@@ -51,6 +52,7 @@ export default function LoginPage() {
           {pending ? "Entrando..." : "Entrar"}
         </button>
       </form>
+      </div>
     </div>
   );
 }

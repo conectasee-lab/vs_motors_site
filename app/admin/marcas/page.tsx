@@ -9,6 +9,7 @@ export default async function MarcasPage() {
   const brands = await getBrands();
 
   return (
+    <div className="min-h-screen w-full bg-gray-50">
     <div className="max-w-2xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-brand-black">Marcas</h1>
@@ -50,6 +51,7 @@ export default async function MarcasPage() {
           ))}
         </ul>
       )}
+    </div>
     </div>
   );
 }

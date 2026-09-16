@@ -9,15 +9,22 @@ export default async function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative bg-brand-black pt-16 pb-28 px-4 overflow-hidden">
-        <svg
-          viewBox="0 0 64 32"
-          className="pointer-events-none absolute -right-24 top-1/2 -translate-y-1/2 w-[38rem] h-auto text-white/[0.04]"
-          fill="currentColor"
+      <section className="relative h-[700px] flex items-center pt-16 pb-28 px-4 overflow-hidden bg-brand-black">
+        {/* Hero background photo */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/loaj_de_deiculos_em_jundiai.png')" }}
           aria-hidden="true"
-        >
-          <path d="M6 22c-3 0-5-2-5-5s2-5 5-5l4-8c1-2 3-3 5-3h18c2 0 4 1 5 3l4 8c3 0 5 2 5 5s-2 5-5 5H6Zm6-14-2 5h10l-2-5H12Zm14 0-2 5h14l-3-5H26Z" />
-        </svg>
+        />
+        {/* Dark overlay for text legibility */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.85) 30%, rgba(10,10,10,0.45) 55%, rgba(10,10,10,0.15) 75%, rgba(10,10,10,0.05) 100%)",
+          }}
+          aria-hidden="true"
+        />
 
         <div className="relative max-w-3xl mx-auto">
           <div className="mb-10">
