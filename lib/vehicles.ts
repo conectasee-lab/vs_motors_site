@@ -1,6 +1,8 @@
+import type { Brand } from "./brands";
+
 export type Vehicle = {
   id: string;
-  brand: string;
+  brand: Brand | null;
   model: string;
   year: number;
   price: number;
@@ -13,7 +15,7 @@ export type Vehicle = {
 };
 
 export type VehicleFilters = {
-  brand?: string;
+  brandId?: string;
   model?: string;
   minYear?: number;
   maxYear?: number;
@@ -27,7 +29,7 @@ export type VehicleFilters = {
 
 export function filterVehicles(vehicles: Vehicle[], filters: VehicleFilters): Vehicle[] {
   return vehicles.filter((v) => {
-    if (filters.brand && v.brand !== filters.brand) return false;
+    if (filters.brandId && v.brand?.id !== filters.brandId) return false;
     if (filters.model && v.model !== filters.model) return false;
     if (filters.minYear && v.year < filters.minYear) return false;
     if (filters.maxYear && v.year > filters.maxYear) return false;
