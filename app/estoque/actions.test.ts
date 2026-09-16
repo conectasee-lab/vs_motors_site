@@ -97,12 +97,55 @@ describe("updateVehicleAction", () => {
     fd.append("photos", new File(["x"], "p1.jpg", { type: "image/jpeg" }));
 
     const { updateVehicleAction } = await import("./actions");
-    const result = await updateVehicleAction("v1", [], fd);
+    const result = await updateVehicleAction("v1", fd);
 
     expect(result).toEqual({
       error: "Falha ao enviar foto p1.jpg: bucket unreachable",
     });
     expect(fromMock).not.toHaveBeenCalled();
+  });
+
+  it("saves only the kept images plus newly uploaded ones, reflecting removals", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    const updateEqMock = vi.fn().mockResolvedValue({ error: null });
+    const updateVehicleMock = vi.fn(() => ({ eq: updateEqMock }));
+    const deleteEqMock = vi.fn().mockResolvedValue({ error: null });
+
+    fromMock.mockImplementation((table: string) => {
+      if (table === "vehicles") return { update: updateVehicleMock };
+      if (table === "vehicle_accessories") return { delete: () => ({ eq: deleteEqMock }) };
+      throw new Error(`unexpected table ${table}`);
+    });
+
+    const { updateVehicleAction } = await import("./actions");
+    const fd = baseFormData();
+    fd.append("kept_images", "https://cdn/photo-1.jpg");
+
+    await updateVehicleAction("v1", fd);
+
+    expect(updateVehicleMock).toHaveBeenCalledWith(
+      expect.objectContaining({ images: ["https://cdn/photo-1.jpg"] }),
+    );
+  });
+
+  it("drops removed photos entirely when no kept_images are submitted", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    const updateEqMock = vi.fn().mockResolvedValue({ error: null });
+    const updateVehicleMock = vi.fn(() => ({ eq: updateEqMock }));
+    const deleteEqMock = vi.fn().mockResolvedValue({ error: null });
+
+    fromMock.mockImplementation((table: string) => {
+      if (table === "vehicles") return { update: updateVehicleMock };
+      if (table === "vehicle_accessories") return { delete: () => ({ eq: deleteEqMock }) };
+      throw new Error(`unexpected table ${table}`);
+    });
+
+    const { updateVehicleAction } = await import("./actions");
+    await updateVehicleAction("v1", baseFormData());
+
+    expect(updateVehicleMock).toHaveBeenCalledWith(
+      expect.objectContaining({ images: [] }),
+    );
   });
 });
 
@@ -126,5 +169,105 @@ describe("createVehicleAction field parsing", () => {
     expect(insertMock).toHaveBeenCalledWith(
       expect.objectContaining({ brand_id: null }),
     );
+  });
+});
+
+describe("createVehicleAction accessories", () => {
+  it("links the selected accessories after inserting the vehicle", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    const singleMock = vi.fn().mockResolvedValue({ data: { id: "v1" }, error: null });
+    const selectMock = vi.fn(() => ({ single: singleMock }));
+    const insertVehicleMock = vi.fn(() => ({ select: selectMock }));
+    const insertAccessoriesMock = vi.fn().mockResolvedValue({ error: null });
+
+    fromMock.mockImplementation((table: string) => {
+      if (table === "vehicles") return { insert: insertVehicleMock };
+      if (table === "vehicle_accessories") return { insert: insertAccessoriesMock };
+      throw new Error(`unexpected table ${table}`);
+    });
+
+    const { createVehicleAction } = await import("./actions");
+    const fd = baseFormData();
+    fd.append("accessory_ids", "a1");
+    fd.append("accessory_ids", "a2");
+
+    await createVehicleAction(fd);
+
+    expect(insertAccessoriesMock).toHaveBeenCalledWith([
+      { vehicle_id: "v1", accessory_id: "a1" },
+      { vehicle_id: "v1", accessory_id: "a2" },
+    ]);
+  });
+
+  it("never touches vehicle_accessories when no accessory is selected", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    const singleMock = vi.fn().mockResolvedValue({ data: { id: "v1" }, error: null });
+    const selectMock = vi.fn(() => ({ single: singleMock }));
+    const insertVehicleMock = vi.fn(() => ({ select: selectMock }));
+
+    fromMock.mockImplementation((table: string) => {
+      expect(table).toBe("vehicles");
+      return { insert: insertVehicleMock };
+    });
+
+    const { createVehicleAction } = await import("./actions");
+    await createVehicleAction(baseFormData());
+
+    expect(fromMock).not.toHaveBeenCalledWith("vehicle_accessories");
+  });
+});
+
+describe("updateVehicleAction accessories", () => {
+  it("clears old links and inserts the newly selected accessories", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    const updateEqMock = vi.fn().mockResolvedValue({ error: null });
+    const updateVehicleMock = vi.fn(() => ({ eq: updateEqMock }));
+    const deleteEqMock = vi.fn().mockResolvedValue({ error: null });
+    const insertAccessoriesMock = vi.fn().mockResolvedValue({ error: null });
+
+    fromMock.mockImplementation((table: string) => {
+      if (table === "vehicles") return { update: updateVehicleMock };
+      if (table === "vehicle_accessories") {
+        return {
+          delete: () => ({ eq: deleteEqMock }),
+          insert: insertAccessoriesMock,
+        };
+      }
+      throw new Error(`unexpected table ${table}`);
+    });
+
+    const { updateVehicleAction } = await import("./actions");
+    const fd = baseFormData();
+    fd.append("accessory_ids", "a2");
+
+    await updateVehicleAction("v1", fd);
+
+    expect(deleteEqMock).toHaveBeenCalledWith("vehicle_id", "v1");
+    expect(insertAccessoriesMock).toHaveBeenCalledWith([{ vehicle_id: "v1", accessory_id: "a2" }]);
+  });
+
+  it("clears all links and inserts nothing when every accessory is unchecked", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    const updateEqMock = vi.fn().mockResolvedValue({ error: null });
+    const updateVehicleMock = vi.fn(() => ({ eq: updateEqMock }));
+    const deleteEqMock = vi.fn().mockResolvedValue({ error: null });
+    const insertAccessoriesMock = vi.fn();
+
+    fromMock.mockImplementation((table: string) => {
+      if (table === "vehicles") return { update: updateVehicleMock };
+      if (table === "vehicle_accessories") {
+        return {
+          delete: () => ({ eq: deleteEqMock }),
+          insert: insertAccessoriesMock,
+        };
+      }
+      throw new Error(`unexpected table ${table}`);
+    });
+
+    const { updateVehicleAction } = await import("./actions");
+    await updateVehicleAction("v1", baseFormData());
+
+    expect(deleteEqMock).toHaveBeenCalledWith("vehicle_id", "v1");
+    expect(insertAccessoriesMock).not.toHaveBeenCalled();
   });
 });

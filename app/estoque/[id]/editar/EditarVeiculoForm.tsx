@@ -6,12 +6,24 @@ import VehicleForm from "@/components/VehicleForm";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import type { Vehicle } from "@/lib/vehicles";
 import type { Brand } from "@/lib/brands";
+import type { BodyType } from "@/lib/body-types";
+import type { Accessory } from "@/lib/accessories";
 
 type State = { error: string | null };
 
-export default function EditarVeiculoForm({ vehicle, brands }: { vehicle: Vehicle; brands: Brand[] }) {
+export default function EditarVeiculoForm({
+  vehicle,
+  brands,
+  bodyTypes,
+  accessories,
+}: {
+  vehicle: Vehicle;
+  brands: Brand[];
+  bodyTypes: BodyType[];
+  accessories: Accessory[];
+}) {
   const [state, formAction, pending] = useActionState<State, FormData>(
-    async (_prev, formData) => updateVehicleAction(vehicle.id, vehicle.images, formData),
+    async (_prev, formData) => updateVehicleAction(vehicle.id, formData),
     { error: null }
   );
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -34,7 +46,8 @@ export default function EditarVeiculoForm({ vehicle, brands }: { vehicle: Vehicl
         action={formAction}
         vehicle={vehicle}
         brands={brands}
-        existingPhotoCount={vehicle.images.length}
+        bodyTypes={bodyTypes}
+        accessories={accessories}
         pending={pending}
         error={state.error}
       />

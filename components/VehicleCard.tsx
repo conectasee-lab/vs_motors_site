@@ -44,6 +44,7 @@ export default function VehicleCard({
           </div>
           <p className="text-gray-600 text-sm font-semibold mt-3">
             {vehicle.model}
+            {vehicle.bodyType && <span className="text-gray-400 font-normal"> · {vehicle.bodyType.name}</span>}
           </p>
           <div className="flex items-center gap-4 text-gray-500 text-sm mt-2">
             <span className="flex items-center gap-1.5">

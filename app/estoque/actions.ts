@@ -10,8 +10,10 @@ type ActionResult = { error: string | null };
 
 function parseVehicleFields(formData: FormData) {
   const brandId = String(formData.get("brand_id") ?? "").trim();
+  const bodyTypeId = String(formData.get("body_type_id") ?? "").trim();
   return {
     brand_id: brandId || null,
+    body_type_id: bodyTypeId || null,
     model: String(formData.get("model") ?? "").trim(),
     year: Number(formData.get("year")),
     price: Number(formData.get("price")),
@@ -21,6 +23,38 @@ function parseVehicleFields(formData: FormData) {
     color: String(formData.get("color") ?? "").trim(),
     description: String(formData.get("description") ?? "").trim(),
   };
+}
+
+function parseAccessoryIds(formData: FormData): string[] {
+  return formData.getAll("accessory_ids").map(String).filter(Boolean);
+}
+
+async function insertVehicleAccessories(
+  supabase: Awaited<ReturnType<typeof createServerSupabaseClient>>,
+  vehicleId: string,
+  accessoryIds: string[]
+): Promise<string | null> {
+  if (accessoryIds.length === 0) return null;
+  const { error } = await supabase
+    .from("vehicle_accessories")
+    .insert(accessoryIds.map((accessoryId) => ({ vehicle_id: vehicleId, accessory_id: accessoryId })));
+  if (error) return `Falha ao vincular acessórios: ${error.message}`;
+  return null;
+}
+
+/** Replaces a vehicle's accessory links with `accessoryIds`, including clearing them all when empty. */
+async function syncVehicleAccessories(
+  supabase: Awaited<ReturnType<typeof createServerSupabaseClient>>,
+  vehicleId: string,
+  accessoryIds: string[]
+): Promise<string | null> {
+  const { error: deleteError } = await supabase
+    .from("vehicle_accessories")
+    .delete()
+    .eq("vehicle_id", vehicleId);
+  if (deleteError) return `Falha ao atualizar acessórios: ${deleteError.message}`;
+
+  return insertVehicleAccessories(supabase, vehicleId, accessoryIds);
 }
 
 function validateVehicleFields(
@@ -99,13 +133,15 @@ export async function createVehicleAction(formData: FormData): Promise<ActionRes
     return { error: message };
   }
 
+  const accessoryError = await insertVehicleAccessories(supabase, inserted.id, parseAccessoryIds(formData));
+  if (accessoryError) return { error: accessoryError };
+
   revalidatePath("/estoque");
   redirect("/estoque");
 }
 
 export async function updateVehicleAction(
   id: string,
-  existingImages: string[],
   formData: FormData
 ): Promise<ActionResult> {
   await requireUser();
@@ -114,6 +150,7 @@ export async function updateVehicleAction(
   const fieldError = validateVehicleFields(fields);
   if (fieldError) return { error: fieldError };
 
+  const existingImages = formData.getAll("kept_images").map(String).filter(Boolean);
   const photos = formData.getAll("photos").filter((f): f is File => f instanceof File && f.size > 0);
   const photoCheck = validatePhotos(existingImages.length, photos.map((f) => ({ name: f.name, type: f.type, size: f.size })));
   if (photoCheck.error) return { error: photoCheck.error };
@@ -133,6 +170,9 @@ export async function updateVehicleAction(
     .eq("id", id);
 
   if (error) return { error: `Falha ao atualizar veículo: ${error.message}` };
+
+  const accessoryError = await syncVehicleAccessories(supabase, id, parseAccessoryIds(formData));
+  if (accessoryError) return { error: accessoryError };
 
   revalidatePath("/estoque");
   revalidatePath(`/estoque/${id}`);

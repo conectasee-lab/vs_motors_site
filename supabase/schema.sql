@@ -168,3 +168,93 @@ create policy "authenticated users can update company contact"
   on company_contact for update
   to authenticated
   using (true);
+
+-- Accessories: CRUD entity for vehicle accessories (name only), linked to
+-- vehicles through a join table so a vehicle can have many accessories and
+-- an accessory can belong to many vehicles.
+
+create table if not exists accessories (
+  id uuid primary key default gen_random_uuid(),
+  name text not null unique,
+  created_at timestamptz not null default now()
+);
+
+alter table accessories enable row level security;
+
+create policy "public can read accessories"
+  on accessories for select
+  using (true);
+
+create policy "authenticated users can insert accessories"
+  on accessories for insert
+  to authenticated
+  with check (true);
+
+create policy "authenticated users can update accessories"
+  on accessories for update
+  to authenticated
+  using (true);
+
+create policy "authenticated users can delete accessories"
+  on accessories for delete
+  to authenticated
+  using (true);
+
+create table if not exists vehicle_accessories (
+  vehicle_id uuid not null references vehicles(id) on delete cascade,
+  accessory_id uuid not null references accessories(id) on delete cascade,
+  primary key (vehicle_id, accessory_id)
+);
+
+alter table vehicle_accessories enable row level security;
+
+create policy "public can read vehicle accessories"
+  on vehicle_accessories for select
+  using (true);
+
+create policy "authenticated users can insert vehicle accessories"
+  on vehicle_accessories for insert
+  to authenticated
+  with check (true);
+
+create policy "authenticated users can delete vehicle accessories"
+  on vehicle_accessories for delete
+  to authenticated
+  using (true);
+
+-- Body types: CRUD entity for vehicle body styles (name only), linked from
+-- vehicles the same way brands are (a single optional foreign key).
+
+create table if not exists body_types (
+  id uuid primary key default gen_random_uuid(),
+  name text not null unique,
+  created_at timestamptz not null default now()
+);
+
+alter table body_types enable row level security;
+
+create policy "public can read body types"
+  on body_types for select
+  using (true);
+
+create policy "authenticated users can insert body types"
+  on body_types for insert
+  to authenticated
+  with check (true);
+
+create policy "authenticated users can update body types"
+  on body_types for update
+  to authenticated
+  using (true);
+
+create policy "authenticated users can delete body types"
+  on body_types for delete
+  to authenticated
+  using (true);
+
+insert into body_types (name)
+values ('Sedã'), ('Hatch'), ('SUV'), ('Picape'), ('Perua'), ('Coupé'), ('Conversível'), ('Minivan')
+on conflict (name) do nothing;
+
+alter table vehicles
+  add column if not exists body_type_id uuid references body_types(id);

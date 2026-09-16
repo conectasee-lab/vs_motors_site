@@ -55,6 +55,14 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             <div className="bg-white border border-gray-200 rounded-lg p-5 mt-6">
               <h2 className="font-bold text-brand-black mb-4">Ficha técnica</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm text-gray-700">
+                {vehicle.bodyType && (
+                  <p className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2.5">
+                    <svg className="w-5 h-5 text-brand-red shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 17h16M6 17V9l2-4h8l2 4v8M9 17v2M15 17v2" />
+                    </svg>
+                    {vehicle.bodyType.name}
+                  </p>
+                )}
                 <p className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2.5">
                   <svg className="w-5 h-5 text-brand-red shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
                     <circle cx="12" cy="12" r="8" />
@@ -94,6 +102,12 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             <div className="bg-white border border-gray-200 rounded-lg p-5 mt-6">
               <h2 className="font-bold text-brand-black mb-3">+ Informações</h2>
               <p className="text-gray-700 whitespace-pre-line">{vehicle.description}</p>
+              {vehicle.accessories.length > 0 && (
+                <p className="text-gray-700 mt-3">
+                  <span className="font-semibold text-brand-black">Acessórios: </span>
+                  {vehicle.accessories.map((a) => a.name).join(", ")}
+                </p>
+              )}
             </div>
           </div>
 

@@ -28,6 +28,18 @@ export default function EmployeeBar() {
       >
         Gerenciar contato
       </Link>
+      <Link
+        href="/admin/acessorios"
+        className="text-sm font-semibold text-white border border-brand-gold/40 px-4 py-2 rounded hover:bg-brand-black-soft transition-colors"
+      >
+        Gerenciar acessórios
+      </Link>
+      <Link
+        href="/admin/carrocerias"
+        className="text-sm font-semibold text-white border border-brand-gold/40 px-4 py-2 rounded hover:bg-brand-black-soft transition-colors"
+      >
+        Gerenciar carrocerias
+      </Link>
       <form action={logoutAction} className="ml-auto">
         <button
           type="submit"
