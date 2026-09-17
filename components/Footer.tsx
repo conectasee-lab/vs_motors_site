@@ -11,12 +11,12 @@ export default async function Footer() {
           <p className="leading-relaxed">Qualidade e confiança na hora de comprar seu carro.</p>
         </div>
         <div>
-          <p className="text-brand-red font-semibold mb-3">Contato</p>
+          <p className="text-brand-red font-semibold text-lg mb-3">Contato</p>
           <p className="leading-relaxed">WhatsApp: {contact.whatsapp}</p>
           <p className="leading-relaxed">{contact.email}</p>
         </div>
         <div>
-          <p className="text-brand-red font-semibold mb-3">Endereço</p>
+          <p className="text-brand-red font-semibold text-lg mb-3">Endereço</p>
           <p className="leading-relaxed">{contact.address}</p>
         </div>
       </div>

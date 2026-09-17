@@ -144,8 +144,8 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
         {similarVehicles.length > 0 && (
           <div className="mt-10">
-            <h2 className="text-xl font-bold text-brand-black mb-4">Sugestões para você</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <h2 className="text-xl font-bold text-brand-black mb-4 text-center">Sugestões para você</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {similarVehicles.map((v) => (
                 <VehicleCard key={v.id} vehicle={v} isLoggedIn={isLoggedIn} />
               ))}
@@ -155,20 +155,21 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
 
         {(contact.instagramUrl || contact.facebookUrl) && (
           <div className="mt-10">
-            <h2 className="text-xl font-bold text-brand-black mb-4">Nossas redes sociais</h2>
-            <div className="flex items-center gap-3">
+            <h2 className="text-xl font-bold text-brand-black mb-4 text-center">Nossas redes sociais</h2>
+            <div className="flex items-center justify-center gap-3">
               {contact.instagramUrl && (
                 <a
                   href={contact.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
-                  className="w-11 h-11 flex items-center justify-center rounded-full bg-white border border-gray-200 text-brand-black hover:border-brand-red hover:text-brand-red transition-colors"
+                  className="w-12 h-12 flex items-center justify-center rounded-2xl shrink-0 shadow-sm transition-all duration-200 hover:scale-110 hover:shadow-md hover:-translate-y-0.5"
+                  style={{ background: "radial-gradient(circle at 30% 110%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%)" }}
                 >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.75" aria-hidden="true">
                     <rect x="3" y="3" width="18" height="18" rx="5" />
                     <circle cx="12" cy="12" r="4" />
-                    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                    <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none" />
                   </svg>
                 </a>
               )}
@@ -178,10 +179,10 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="w-11 h-11 flex items-center justify-center rounded-full bg-white border border-gray-200 text-brand-black hover:border-brand-red hover:text-brand-red transition-colors"
+                  className="w-12 h-12 flex items-center justify-center rounded-full shrink-0 bg-[#1877F2] shadow-sm transition-all duration-200 hover:scale-110 hover:shadow-md hover:-translate-y-0.5"
                 >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 9h2V6h-2c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.2l.8-3H14V9Z" />
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                    <path d="M14 9h2.5V6H14c-1.9 0-3.5 1.6-3.5 3.5V11H8v3h2.5v6h3v-6h2.5l.5-3h-3V9.8c0-.5.3-.8.5-.8Z" />
                   </svg>
                 </a>
               )}
