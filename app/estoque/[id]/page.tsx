@@ -1,18 +1,29 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getVehicleById } from "@/lib/vehicles-data";
+import { getVehicleById, getVehicles } from "@/lib/vehicles-data";
+import { pickSimilarVehicles } from "@/lib/vehicles";
 import { getSessionUser } from "@/lib/auth";
 import { getCompanyContact, whatsappDigits } from "@/lib/company-contact";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import ShareButton from "@/components/ShareButton";
 import VehicleGallery from "@/components/VehicleGallery";
+import VehicleCard from "@/components/VehicleCard";
+
+const GOOGLE_MAPS_LINK = "https://maps.app.goo.gl/CEtFup5QyCujbqxh8";
 
 export default async function VehicleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [vehicle, user, contact] = await Promise.all([getVehicleById(id), getSessionUser(), getCompanyContact()]);
+  const [vehicle, user, contact, allVehicles] = await Promise.all([
+    getVehicleById(id),
+    getSessionUser(),
+    getCompanyContact(),
+    getVehicles(),
+  ]);
   if (!vehicle) notFound();
   const isLoggedIn = !!user;
   const title = `${vehicle.brand?.name ?? ""} ${vehicle.model}`.trim();
+  const similarVehicles = pickSimilarVehicles(allVehicles, vehicle, 3);
 
   return (
     <div className="min-h-screen w-full bg-gray-50">
@@ -111,9 +122,94 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             </div>
           </div>
 
-          <div className="lg:sticky lg:top-24 h-fit space-y-3">
-            <WhatsAppButton vehicle={vehicle} phoneNumber={whatsappDigits(contact.whatsapp)} />
-            <p className="text-center text-sm text-gray-500">Onde estamos — VS Motors, Jundiaí</p>
+          <div className="lg:sticky lg:top-24 h-fit">
+            <div className="bg-white border border-gray-200 rounded-lg p-5 space-y-4">
+              <WhatsAppButton vehicle={vehicle} phoneNumber={whatsappDigits(contact.whatsapp)} />
+
+              <div className="flex items-start gap-2 text-sm text-gray-600 pt-4 border-t border-gray-100">
+                <svg className="w-5 h-5 text-brand-red shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 21s-7-6.1-7-11a7 7 0 1 1 14 0c0 4.9-7 11-7 11Z" />
+                  <circle cx="12" cy="10" r="2.5" />
+                </svg>
+                <div>
+                  <p className="font-semibold text-brand-black">Onde estamos</p>
+                  <p>{contact.address}</p>
+                </div>
+              </div>
+
+              <ShareButton title={`${title} — VS Motors`} />
+            </div>
+          </div>
+        </div>
+
+        {similarVehicles.length > 0 && (
+          <div className="mt-10">
+            <h2 className="text-xl font-bold text-brand-black mb-4">Sugestões para você</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {similarVehicles.map((v) => (
+                <VehicleCard key={v.id} vehicle={v} isLoggedIn={isLoggedIn} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {(contact.instagramUrl || contact.facebookUrl) && (
+          <div className="mt-10">
+            <h2 className="text-xl font-bold text-brand-black mb-4">Nossas redes sociais</h2>
+            <div className="flex items-center gap-3">
+              {contact.instagramUrl && (
+                <a
+                  href={contact.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="w-11 h-11 flex items-center justify-center rounded-full bg-white border border-gray-200 text-brand-black hover:border-brand-red hover:text-brand-red transition-colors"
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
+                    <rect x="3" y="3" width="18" height="18" rx="5" />
+                    <circle cx="12" cy="12" r="4" />
+                    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                  </svg>
+                </a>
+              )}
+              {contact.facebookUrl && (
+                <a
+                  href={contact.facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                  className="w-11 h-11 flex items-center justify-center rounded-full bg-white border border-gray-200 text-brand-black hover:border-brand-red hover:text-brand-red transition-colors"
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 9h2V6h-2c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.2l.8-3H14V9Z" />
+                  </svg>
+                </a>
+              )}
+            </div>
+          </div>
+        )}
+
+        <div className="mt-10">
+          <h2 className="text-xl font-bold text-brand-black mb-4">Onde estamos</h2>
+          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <iframe
+              title="Localização da VS Motors"
+              src={`https://www.google.com/maps?q=${encodeURIComponent(contact.address)}&output=embed`}
+              className="w-full h-72 border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <div className="p-4 flex items-center justify-between gap-3 flex-wrap">
+              <p className="text-sm text-gray-600">{contact.address}</p>
+              <a
+                href={GOOGLE_MAPS_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-semibold text-brand-red hover:underline shrink-0"
+              >
+                Abrir no Google Maps
+              </a>
+            </div>
           </div>
         </div>
       </div>

@@ -12,13 +12,13 @@ export default function VehicleCard({
   return (
     <div className="group relative block bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-brand-black transition-colors duration-200">
       <Link href={`/estoque/${vehicle.id}`} className="block">
-        <div className="relative w-full h-52 bg-brand-black-soft overflow-hidden flex items-center justify-center">
+        <div className="relative w-full aspect-square bg-brand-black-soft overflow-hidden flex items-center justify-center p-3">
           {vehicle.images.length > 0 ? (
             <Image
               src={vehicle.images[0]}
               alt={`${vehicle.brand?.name ?? ""} ${vehicle.model}`.trim()}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              className="object-contain group-hover:scale-105 transition-transform duration-300"
             />
           ) : (
             <svg
@@ -31,22 +31,22 @@ export default function VehicleCard({
             </svg>
           )}
         </div>
-        <div className="p-5">
+        <div className="p-4">
           <div className="flex items-center gap-2">
             {vehicle.brand?.logoUrl ? (
-              <Image src={vehicle.brand.logoUrl} alt={vehicle.brand.name} width={36} height={36} className="object-contain shrink-0 rounded-full border border-gray-200" />
+              <Image src={vehicle.brand.logoUrl} alt={vehicle.brand.name} width={32} height={32} className="object-contain shrink-0 rounded-full border border-gray-200" />
             ) : (
-              <span className="w-9 h-9 rounded-full bg-gray-100 shrink-0" />
+              <span className="w-8 h-8 rounded-full bg-gray-100 shrink-0" />
             )}
-            <p className="text-brand-black font-bold text-lg leading-tight">
+            <p className="text-brand-black font-bold text-base leading-tight truncate">
               {vehicle.brand?.name ?? vehicle.model}
             </p>
           </div>
-          <p className="text-gray-600 text-sm font-semibold mt-3">
+          <p className="text-gray-600 text-sm font-semibold mt-2.5 truncate">
             {vehicle.model}
             {vehicle.bodyType && <span className="text-gray-400 font-normal"> · {vehicle.bodyType.name}</span>}
           </p>
-          <div className="flex items-center gap-4 text-gray-500 text-sm mt-2">
+          <div className="flex items-center gap-3 text-gray-500 text-sm mt-2">
             <span className="flex items-center gap-1.5">
               <svg className="w-4 h-4 text-brand-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
                 <rect x="3" y="5" width="18" height="16" rx="2" />
@@ -62,11 +62,11 @@ export default function VehicleCard({
               {vehicle.km.toLocaleString("pt-BR")} km
             </span>
           </div>
-          <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
-            <p className="text-brand-red font-bold text-xl">
+          <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
+            <p className="text-brand-red font-bold text-lg">
               {vehicle.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
             </p>
-            <span className="bg-brand-red text-white text-sm font-semibold px-4 py-2 rounded-full shrink-0">
+            <span className="bg-brand-red text-white text-sm font-semibold px-4 py-1.5 rounded-full shrink-0">
               Ver mais
             </span>
           </div>

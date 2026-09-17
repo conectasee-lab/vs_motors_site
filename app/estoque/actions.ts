@@ -60,7 +60,7 @@ async function syncVehicleAccessories(
 function validateVehicleFields(
   fields: ReturnType<typeof parseVehicleFields>
 ): string | null {
-  if (!fields.model || !fields.fuel || !fields.color) {
+  if (!fields.model || !fields.fuel || !fields.color || !fields.body_type_id) {
     return "Preencha todos os campos obrigatórios.";
   }
   if (!Number.isFinite(fields.year) || fields.year < 1900) {

@@ -43,6 +43,26 @@ export default function ContatoForm({ contact }: { contact: CompanyContact }) {
           className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900"
         />
       </div>
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-1">Instagram</label>
+        <input
+          name="instagram_url"
+          type="url"
+          defaultValue={contact.instagramUrl}
+          placeholder="https://www.instagram.com/vsmotorsjundiai/"
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-1">Facebook</label>
+        <input
+          name="facebook_url"
+          type="url"
+          defaultValue={contact.facebookUrl}
+          placeholder="https://www.facebook.com/vsmotorsjundiai"
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900"
+        />
+      </div>
 
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}
       {state.success && <p className="text-sm text-green-600">Dados de contato atualizados.</p>}

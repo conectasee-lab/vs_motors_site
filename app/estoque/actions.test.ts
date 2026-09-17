@@ -24,6 +24,7 @@ vi.mock("next/navigation", () => ({ redirect: vi.fn() }));
 function baseFormData() {
   const fd = new FormData();
   fd.set("brand_id", "b1");
+  fd.set("body_type_id", "t1");
   fd.set("model", "Corolla");
   fd.set("year", "2021");
   fd.set("price", "112000");
@@ -41,6 +42,17 @@ describe("createVehicleAction", () => {
     const { createVehicleAction } = await import("./actions");
 
     await expect(createVehicleAction(baseFormData())).rejects.toThrow("REDIRECT:/login");
+    expect(fromMock).not.toHaveBeenCalled();
+  });
+
+  it("returns an error when body_type_id is missing", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    const fd = baseFormData();
+    fd.set("body_type_id", "");
+    const { createVehicleAction } = await import("./actions");
+
+    const result = await createVehicleAction(fd);
+    expect(result).toEqual({ error: "Preencha todos os campos obrigatórios." });
     expect(fromMock).not.toHaveBeenCalled();
   });
 

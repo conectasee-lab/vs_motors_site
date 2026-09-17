@@ -81,8 +81,8 @@ export default function VehicleForm({ action, vehicle, brands, bodyTypes, access
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Carroceria</label>
-          <select name="body_type_id" defaultValue={vehicle?.bodyType?.id ?? ""} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900">
-            <option value="">Selecione uma carroceria</option>
+          <select name="body_type_id" defaultValue={vehicle?.bodyType?.id ?? ""} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900">
+            <option value="" disabled>Selecione uma carroceria</option>
             {bodyTypes.map((b) => (
               <option key={b.id} value={b.id}>{b.name}</option>
             ))}

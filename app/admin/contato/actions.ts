@@ -12,11 +12,20 @@ export async function updateCompanyContactAction(formData: FormData): Promise<Ac
   const whatsapp = String(formData.get("whatsapp") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const address = String(formData.get("address") ?? "").trim();
+  const instagramUrl = String(formData.get("instagram_url") ?? "").trim();
+  const facebookUrl = String(formData.get("facebook_url") ?? "").trim();
 
   const supabase = await createServerSupabaseClient();
   const { error } = await supabase
     .from("company_contact")
-    .update({ whatsapp, email, address, updated_at: new Date().toISOString() })
+    .update({
+      whatsapp,
+      email,
+      address,
+      instagram_url: instagramUrl,
+      facebook_url: facebookUrl,
+      updated_at: new Date().toISOString(),
+    })
     .eq("id", true);
 
   if (error) return { error: `Falha ao salvar dados de contato: ${error.message}`, success: false };

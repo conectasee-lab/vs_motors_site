@@ -296,29 +296,6 @@ export default function EstoqueFilters({
 
   const filterPanel = (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-6">
-      <FilterGroup title="Marca">
-        <RadioOption
-          name="brand"
-          checked={!filters.brandId}
-          onChange={() => update("brandId", undefined)}
-          label="Todas"
-          count={countBy("brandId", undefined, { ...filters, brandId: undefined })}
-        />
-        <LimitedList
-          items={brandOptions}
-          renderItem={(b) => (
-            <RadioOption
-              key={b.id}
-              name="brand"
-              checked={filters.brandId === b.id}
-              onChange={() => update("brandId", b.id)}
-              label={b.name}
-              count={countBy("brandId", b.id, { ...filters, brandId: undefined })}
-            />
-          )}
-        />
-      </FilterGroup>
-
       <FilterGroup title="Carroceria">
         <RadioOption
           name="bodyType"
@@ -590,7 +567,7 @@ export default function EstoqueFilters({
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {results.map((v) => (
                 <VehicleCard key={v.id} vehicle={v} isLoggedIn={isLoggedIn} />
               ))}

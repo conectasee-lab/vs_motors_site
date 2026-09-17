@@ -158,6 +158,18 @@ alter table company_contact drop column if exists phone;
 
 insert into company_contact (id) values (true) on conflict (id) do nothing;
 
+alter table company_contact
+  add column if not exists instagram_url text not null default '',
+  add column if not exists facebook_url text not null default '';
+
+update company_contact
+  set instagram_url = 'https://www.instagram.com/vsmotorsjundiai/'
+  where instagram_url = '';
+
+update company_contact
+  set facebook_url = 'https://www.facebook.com/profile.php?id=61593187356900'
+  where facebook_url = '';
+
 alter table company_contact enable row level security;
 
 create policy "public can read company contact"

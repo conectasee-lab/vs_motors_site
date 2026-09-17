@@ -33,6 +33,28 @@ export type VehicleFilters = {
   accessoryIds?: string[];
 };
 
+/** Picks up to `limit` vehicles similar to `target`: same brand first, then same body type, then any other. */
+export function pickSimilarVehicles(vehicles: Vehicle[], target: Vehicle, limit: number): Vehicle[] {
+  const others = vehicles.filter((v) => v.id !== target.id);
+  const picked: Vehicle[] = [];
+  const pickedIds = new Set<string>();
+
+  function addFrom(candidates: Vehicle[]) {
+    for (const v of candidates) {
+      if (picked.length >= limit) return;
+      if (pickedIds.has(v.id)) continue;
+      picked.push(v);
+      pickedIds.add(v.id);
+    }
+  }
+
+  if (target.brand) addFrom(others.filter((v) => v.brand?.id === target.brand!.id));
+  if (target.bodyType) addFrom(others.filter((v) => v.bodyType?.id === target.bodyType!.id));
+  addFrom(others);
+
+  return picked;
+}
+
 export function filterVehicles(vehicles: Vehicle[], filters: VehicleFilters): Vehicle[] {
   return vehicles.filter((v) => {
     if (filters.brandId && v.brand?.id !== filters.brandId) return false;

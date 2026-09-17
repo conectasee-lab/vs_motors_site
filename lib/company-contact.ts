@@ -4,25 +4,31 @@ export type CompanyContact = {
   whatsapp: string;
   email: string;
   address: string;
+  instagramUrl: string;
+  facebookUrl: string;
 };
 
 const FALLBACK_CONTACT: CompanyContact = {
   whatsapp: "(00) 90000-0000",
   email: "contato@vsmotors.com.br",
   address: "Av. Quatorze de Dezembro, 1300 - Vila Mafalda, Jundiaí - SP, 13206-105",
+  instagramUrl: "",
+  facebookUrl: "",
 };
 
 type CompanyContactRow = {
   whatsapp: string;
   email: string;
   address: string;
+  instagram_url: string;
+  facebook_url: string;
 };
 
 export async function getCompanyContact(): Promise<CompanyContact> {
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("company_contact")
-    .select("whatsapp, email, address")
+    .select("whatsapp, email, address, instagram_url, facebook_url")
     .eq("id", true)
     .maybeSingle();
 
@@ -37,6 +43,8 @@ export async function getCompanyContact(): Promise<CompanyContact> {
     whatsapp: row.whatsapp || FALLBACK_CONTACT.whatsapp,
     email: row.email || FALLBACK_CONTACT.email,
     address: row.address || FALLBACK_CONTACT.address,
+    instagramUrl: row.instagram_url || FALLBACK_CONTACT.instagramUrl,
+    facebookUrl: row.facebook_url || FALLBACK_CONTACT.facebookUrl,
   };
 }
 
