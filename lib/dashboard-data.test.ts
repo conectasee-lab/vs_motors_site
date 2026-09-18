@@ -32,7 +32,7 @@ describe("getEstoqueTotal", () => {
 });
 
 describe("getVendasResumo", () => {
-  it("sums price and counts rows sold before the day after ateDate (inclusive of the whole ateDate day), from the start of the current month", async () => {
+  it("sums price and counts rows sold between deDate (inclusive) and the day after ateDate (exclusive)", async () => {
     const gteMock = vi.fn();
     const ltMock = vi.fn().mockResolvedValue({
       data: [{ price: 1000 }, { price: 2000 }],
@@ -45,9 +45,10 @@ describe("getVendasResumo", () => {
     });
 
     const { getVendasResumo } = await import("./dashboard-data");
-    const result = await getVendasResumo("2026-09-18");
+    const result = await getVendasResumo("2026-09-01", "2026-09-18");
 
     expect(result).toEqual({ quantidade: 2, faturamento: 3000 });
+    expect(gteMock).toHaveBeenCalledWith("sold_at", "2026-09-01");
     expect(ltMock).toHaveBeenCalledWith("sold_at", "2026-09-19");
   });
 
@@ -58,7 +59,7 @@ describe("getVendasResumo", () => {
     fromMock.mockImplementation(() => ({ select: vi.fn().mockReturnValue({ gte: gteMock }) }));
 
     const { getVendasResumo } = await import("./dashboard-data");
-    await getVendasResumo("2026-09-30");
+    await getVendasResumo("2026-09-01", "2026-09-30");
 
     expect(ltMock).toHaveBeenCalledWith("sold_at", "2026-10-01");
   });
@@ -71,7 +72,7 @@ describe("getVendasResumo", () => {
     }));
 
     const { getVendasResumo } = await import("./dashboard-data");
-    expect(await getVendasResumo("2026-09-18")).toEqual({ quantidade: 0, faturamento: 0 });
+    expect(await getVendasResumo("2026-09-01", "2026-09-18")).toEqual({ quantidade: 0, faturamento: 0 });
   });
 });
 

@@ -1,28 +1,53 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-function firstDayOfCurrentMonth(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
-}
-
-export default function DashboardDateFilter({ initialAte }: { initialAte: string }) {
+export default function DashboardDateFilter({
+  initialDe,
+  initialAte,
+}: {
+  initialDe: string;
+  initialAte: string;
+}) {
   const router = useRouter();
+  const [de, setDe] = useState(initialDe);
+  const [ate, setAte] = useState(initialAte);
+
+  function push(nextDe: string, nextAte: string) {
+    if (!nextDe || !nextAte) return;
+    router.push(`/admin/dashboard?de=${nextDe}&ate=${nextAte}`);
+  }
 
   return (
-    <label className="flex items-center gap-2 text-sm text-dash-muted">
-      Vendas até
-      <input
-        type="date"
-        defaultValue={initialAte}
-        min={firstDayOfCurrentMonth()}
-        onChange={(e) => {
-          if (!e.target.value) return;
-          router.push(`/admin/dashboard?ate=${e.target.value}`);
-        }}
-        className="border-none rounded-full px-4 py-2 text-sm text-dash-ink bg-dash-panel shadow-[0_4px_12px_-6px_rgba(27,35,64,0.15)]"
-      />
-    </label>
+    <div className="flex items-center gap-2">
+      <label className="flex flex-col gap-1 text-xs text-white/60">
+        Inicial
+        <input
+          type="date"
+          value={de}
+          max={ate}
+          onChange={(e) => {
+            setDe(e.target.value);
+            push(e.target.value, ate);
+          }}
+          className="rounded-full px-3 py-1.5 text-xs text-dash-ink bg-white/90"
+        />
+      </label>
+      <span className="text-white/30 mt-4">–</span>
+      <label className="flex flex-col gap-1 text-xs text-white/60">
+        Final
+        <input
+          type="date"
+          value={ate}
+          min={de}
+          onChange={(e) => {
+            setAte(e.target.value);
+            push(de, e.target.value);
+          }}
+          className="rounded-full px-3 py-1.5 text-xs text-dash-ink bg-white/90"
+        />
+      </label>
+    </div>
   );
 }

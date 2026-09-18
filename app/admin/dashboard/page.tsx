@@ -5,6 +5,7 @@ import {
   getEstoqueAgrupadoPorMarca,
   getEstoquePorMarcaParaGrafico,
   defaultAteDate,
+  defaultDeDate,
 } from "@/lib/dashboard-data";
 import MetricCard from "@/components/dashboard/MetricCard";
 import DashboardDateFilter from "@/components/dashboard/DashboardDateFilter";
@@ -17,15 +18,17 @@ const currencyFormatter = new Intl.NumberFormat("pt-BR", { style: "currency", cu
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ ate?: string }>;
+  searchParams: Promise<{ de?: string; ate?: string }>;
 }) {
   await requireUser();
-  const { ate } = await searchParams;
-  const ateDate = ate && /^\d{4}-\d{2}-\d{2}$/.test(ate) ? ate : defaultAteDate();
+  const { de, ate } = await searchParams;
+  const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+  const deDate = de && DATE_RE.test(de) ? de : defaultDeDate();
+  const ateDate = ate && DATE_RE.test(ate) ? ate : defaultAteDate();
 
   const [estoqueTotal, vendasResumo, grupos, dadosGrafico] = await Promise.all([
     getEstoqueTotal(),
-    getVendasResumo(ateDate),
+    getVendasResumo(deDate, ateDate),
     getEstoqueAgrupadoPorMarca(),
     getEstoquePorMarcaParaGrafico(),
   ]);
@@ -38,21 +41,31 @@ export default async function DashboardPage({
             <h1 className="text-2xl font-semibold text-dash-ink">Dashboard</h1>
             <p className="text-sm text-dash-muted mt-1">Visão geral do estoque e das vendas</p>
           </div>
-          <div className="flex items-center gap-3 flex-wrap">
-            <DashboardDateFilter initialAte={ateDate} />
-            <BackToEstoqueButton />
-          </div>
+          <BackToEstoqueButton />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-          <MetricCard
-            label="Faturamento no período"
-            value={currencyFormatter.format(vendasResumo.faturamento)}
-            caption={`${vendasResumo.quantidade} ${vendasResumo.quantidade === 1 ? "carro vendido" : "carros vendidos"}`}
-            accent="red"
-            variant="dark"
-            icon={<CurrencyIcon />}
-          />
+        <div className="bg-dash-navy rounded-[20px] p-6 shadow-[0_8px_24px_-12px_rgba(27,35,64,0.18)] mb-5 flex flex-wrap items-start justify-between gap-6">
+          <div className="flex items-start gap-4">
+            <div className="w-11 h-11 shrink-0 rounded-2xl flex items-center justify-center bg-brand-red/20 text-brand-red">
+              <CurrencyIcon />
+            </div>
+            <div>
+              <p className="text-sm text-white/60 mb-1">Faturamento no período</p>
+              <p
+                className="text-3xl font-semibold tabular-nums text-white"
+                style={{ fontFamily: "var(--font-dash-numeric)" }}
+              >
+                {currencyFormatter.format(vendasResumo.faturamento)}
+              </p>
+              <p className="text-xs text-white/50 mt-2">
+                {vendasResumo.quantidade} {vendasResumo.quantidade === 1 ? "carro vendido" : "carros vendidos"}
+              </p>
+            </div>
+          </div>
+          <DashboardDateFilter initialDe={deDate} initialAte={ateDate} />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
           <MetricCard
             label="Carros em estoque"
             value={String(estoqueTotal)}

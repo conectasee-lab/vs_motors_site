@@ -6,7 +6,7 @@ export function defaultAteDate(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-function firstDayOfCurrentMonth(): string {
+export function defaultDeDate(): string {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
 }
@@ -29,13 +29,14 @@ export async function getEstoqueTotal(): Promise<number> {
 }
 
 export async function getVendasResumo(
+  deDate: string = defaultDeDate(),
   ateDate: string = defaultAteDate()
 ): Promise<{ quantidade: number; faturamento: number }> {
   const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from("sold_vehicles")
     .select("price")
-    .gte("sold_at", firstDayOfCurrentMonth())
+    .gte("sold_at", deDate)
     .lt("sold_at", nextDayString(ateDate));
 
   if (error) {
