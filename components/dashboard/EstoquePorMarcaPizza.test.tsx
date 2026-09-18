@@ -44,7 +44,7 @@ describe("EstoquePorMarcaPizza", () => {
     expect(screen.getByText("Nenhum veículo em estoque.")).toBeInTheDocument();
   });
 
-  it("shows the total in the donut's center and a legend row per brand with its percentage", () => {
+  it("shows a legend row per brand with its vehicle count", () => {
     render(
       <EstoquePorMarcaPizza
         dados={[
@@ -54,11 +54,9 @@ describe("EstoquePorMarcaPizza", () => {
       />
     );
 
-    expect(screen.getByText("3")).toBeInTheDocument();
-    expect(screen.getByText("em estoque")).toBeInTheDocument();
     expect(screen.getByText("Toyota")).toBeInTheDocument();
-    expect(screen.getByText("67%")).toBeInTheDocument();
     expect(screen.getByText("Chevrolet")).toBeInTheDocument();
-    expect(screen.getByText("33%")).toBeInTheDocument();
+    expect(screen.getAllByText("2")).not.toHaveLength(0);
+    expect(screen.getAllByText("1")).not.toHaveLength(0);
   });
 });
