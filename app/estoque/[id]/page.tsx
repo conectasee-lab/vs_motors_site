@@ -9,6 +9,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import ShareButton from "@/components/ShareButton";
 import VehicleGallery from "@/components/VehicleGallery";
 import VehicleCard from "@/components/VehicleCard";
+import MarkAsSoldButton from "@/components/MarkAsSoldButton";
 
 export default async function VehicleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -53,12 +54,15 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
             </div>
 
             {isLoggedIn && (
-              <Link
-                href={`/estoque/${vehicle.id}/editar`}
-                className="inline-block mt-4 text-sm font-semibold text-brand-black bg-brand-gold px-4 py-2 rounded hover:bg-brand-gold/80 transition-colors"
-              >
-                Editar
-              </Link>
+              <div className="flex items-center gap-3 mt-4">
+                <Link
+                  href={`/estoque/${vehicle.id}/editar`}
+                  className="inline-block text-sm font-semibold text-brand-black bg-brand-gold px-4 py-2 rounded hover:bg-brand-gold/80 transition-colors"
+                >
+                  Editar
+                </Link>
+                <MarkAsSoldButton vehicleId={vehicle.id} />
+              </div>
             )}
 
             <div className="bg-white border border-gray-200 rounded-lg p-5 mt-6">

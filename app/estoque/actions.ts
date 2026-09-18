@@ -190,3 +190,31 @@ export async function deleteVehicleAction(id: string): Promise<ActionResult> {
   redirect("/estoque");
 }
 
+export async function markVehicleAsSoldAction(id: string): Promise<ActionResult> {
+  await requireUser();
+
+  const supabase = await createServerSupabaseClient();
+  const { data: vehicle, error: fetchError } = await supabase
+    .from("vehicles")
+    .select("model, year, km, price, brand:brands(name)")
+    .eq("id", id)
+    .single();
+  if (fetchError || !vehicle) return { error: "Veículo não encontrado." };
+
+  const brand = Array.isArray(vehicle.brand) ? vehicle.brand[0] : vehicle.brand;
+  const { error: insertError } = await supabase.from("sold_vehicles").insert({
+    brand: brand?.name ?? "",
+    model: vehicle.model,
+    year: vehicle.year,
+    km: vehicle.km,
+    price: vehicle.price,
+  });
+  if (insertError) return { error: `Falha ao registrar venda: ${insertError.message}` };
+
+  const { error: deleteError } = await supabase.from("vehicles").delete().eq("id", id);
+  if (deleteError) return { error: `Falha ao remover veículo do estoque: ${deleteError.message}` };
+
+  revalidatePath("/estoque");
+  redirect("/estoque");
+}
+

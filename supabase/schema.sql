@@ -270,3 +270,29 @@ on conflict (name) do nothing;
 
 alter table vehicles
   add column if not exists body_type_id uuid references body_types(id);
+
+-- Sold vehicles: append-only record of sales, used for the sales dashboard.
+-- Brand/model are stored as plain text (not FKs) so the sale record stays
+-- intact even if the brand is later edited or deleted from the catalog.
+
+create table if not exists sold_vehicles (
+  id uuid primary key default gen_random_uuid(),
+  brand text not null,
+  model text not null,
+  year integer not null,
+  km integer not null,
+  price numeric not null,
+  sold_at timestamptz not null default now()
+);
+
+alter table sold_vehicles enable row level security;
+
+create policy "authenticated users can read sold vehicles"
+  on sold_vehicles for select
+  to authenticated
+  using (true);
+
+create policy "authenticated users can insert sold vehicles"
+  on sold_vehicles for insert
+  to authenticated
+  with check (true);

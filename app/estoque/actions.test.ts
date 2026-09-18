@@ -229,6 +229,81 @@ describe("createVehicleAction accessories", () => {
   });
 });
 
+describe("markVehicleAsSoldAction", () => {
+  it("inserts into sold_vehicles with the resolved brand name, then deletes from vehicles", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    const singleMock = vi.fn().mockResolvedValue({
+      data: { model: "Corolla", year: 2021, km: 32000, price: 112000, brand: { name: "Toyota" } },
+      error: null,
+    });
+    const eqSelectMock = vi.fn(() => ({ single: singleMock }));
+    const selectMock = vi.fn(() => ({ eq: eqSelectMock }));
+    const insertSoldMock = vi.fn().mockResolvedValue({ error: null });
+    const deleteEqMock = vi.fn().mockResolvedValue({ error: null });
+
+    fromMock.mockImplementation((table: string) => {
+      if (table === "vehicles") return { select: selectMock, delete: () => ({ eq: deleteEqMock }) };
+      if (table === "sold_vehicles") return { insert: insertSoldMock };
+      throw new Error(`unexpected table ${table}`);
+    });
+
+    const { markVehicleAsSoldAction } = await import("./actions");
+    await markVehicleAsSoldAction("v1");
+
+    expect(insertSoldMock).toHaveBeenCalledWith({
+      brand: "Toyota",
+      model: "Corolla",
+      year: 2021,
+      km: 32000,
+      price: 112000,
+    });
+    expect(deleteEqMock).toHaveBeenCalledWith("id", "v1");
+  });
+
+  it("returns an error and never deletes when the vehicle is not found", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    const singleMock = vi.fn().mockResolvedValue({ data: null, error: { message: "not found" } });
+    const eqSelectMock = vi.fn(() => ({ single: singleMock }));
+    const selectMock = vi.fn(() => ({ eq: eqSelectMock }));
+    const deleteEqMock = vi.fn();
+
+    fromMock.mockImplementation((table: string) => {
+      expect(table).toBe("vehicles");
+      return { select: selectMock, delete: () => ({ eq: deleteEqMock }) };
+    });
+
+    const { markVehicleAsSoldAction } = await import("./actions");
+    const result = await markVehicleAsSoldAction("v1");
+
+    expect(result).toEqual({ error: "Veículo não encontrado." });
+    expect(deleteEqMock).not.toHaveBeenCalled();
+  });
+
+  it("returns a friendly error and does not delete the vehicle when the sold_vehicles insert fails", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    const singleMock = vi.fn().mockResolvedValue({
+      data: { model: "Corolla", year: 2021, km: 32000, price: 112000, brand: { name: "Toyota" } },
+      error: null,
+    });
+    const eqSelectMock = vi.fn(() => ({ single: singleMock }));
+    const selectMock = vi.fn(() => ({ eq: eqSelectMock }));
+    const insertSoldMock = vi.fn().mockResolvedValue({ error: { message: "constraint violated" } });
+    const deleteEqMock = vi.fn();
+
+    fromMock.mockImplementation((table: string) => {
+      if (table === "vehicles") return { select: selectMock, delete: () => ({ eq: deleteEqMock }) };
+      if (table === "sold_vehicles") return { insert: insertSoldMock };
+      throw new Error(`unexpected table ${table}`);
+    });
+
+    const { markVehicleAsSoldAction } = await import("./actions");
+    const result = await markVehicleAsSoldAction("v1");
+
+    expect(result).toEqual({ error: "Falha ao registrar venda: constraint violated" });
+    expect(deleteEqMock).not.toHaveBeenCalled();
+  });
+});
+
 describe("updateVehicleAction accessories", () => {
   it("clears old links and inserts the newly selected accessories", async () => {
     requireUserMock.mockResolvedValueOnce({ id: "u1" });
