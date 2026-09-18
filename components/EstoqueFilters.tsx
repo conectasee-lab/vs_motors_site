@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { filterVehicles, type VehicleFilters, type Vehicle } from "@/lib/vehicles";
 import type { Brand } from "@/lib/brands";
@@ -235,9 +236,12 @@ export default function EstoqueFilters({
   const fuels = Array.from(new Set(vehicles.map((v) => v.fuel))).sort((a, b) => a.localeCompare(b, "pt-BR"));
   const colors = Array.from(new Set(vehicles.map((v) => v.color))).sort();
 
+  const searchParams = useSearchParams();
+  const initialSearch = searchParams.get("q") ?? "";
+
   const [filters, setFilters] = useState<VehicleFilters>({});
   const [priceRangeLabel, setPriceRangeLabel] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(initialSearch);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [sortOption, setSortOption] = useState<SortOption>("relevance");
@@ -567,7 +571,7 @@ export default function EstoqueFilters({
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {results.map((v) => (
                 <VehicleCard key={v.id} vehicle={v} isLoggedIn={isLoggedIn} />
               ))}

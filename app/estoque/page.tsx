@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getVehicles } from "@/lib/vehicles-data";
 import { getBrands } from "@/lib/brands";
 import { getBodyTypes } from "@/lib/body-types";
@@ -14,12 +15,14 @@ export default async function EstoquePage() {
     getSessionUser(),
   ]);
   return (
-    <EstoqueFilters
-      vehicles={vehicles}
-      brands={brands}
-      bodyTypes={bodyTypes}
-      accessories={accessories}
-      isLoggedIn={!!user}
-    />
+    <Suspense>
+      <EstoqueFilters
+        vehicles={vehicles}
+        brands={brands}
+        bodyTypes={bodyTypes}
+        accessories={accessories}
+        isLoggedIn={!!user}
+      />
+    </Suspense>
   );
 }

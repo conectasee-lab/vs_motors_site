@@ -10,8 +10,6 @@ import ShareButton from "@/components/ShareButton";
 import VehicleGallery from "@/components/VehicleGallery";
 import VehicleCard from "@/components/VehicleCard";
 
-const GOOGLE_MAPS_LINK = "https://maps.app.goo.gl/CEtFup5QyCujbqxh8";
-
 export default async function VehicleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const [vehicle, user, contact, allVehicles] = await Promise.all([
@@ -145,7 +143,7 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
         {similarVehicles.length > 0 && (
           <div className="mt-10">
             <h2 className="text-xl font-bold text-brand-black mb-4 text-center">Sugestões para você</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {similarVehicles.map((v) => (
                 <VehicleCard key={v.id} vehicle={v} isLoggedIn={isLoggedIn} />
               ))}
@@ -153,66 +151,6 @@ export default async function VehicleDetailPage({ params }: { params: Promise<{ 
           </div>
         )}
 
-        {(contact.instagramUrl || contact.facebookUrl) && (
-          <div className="mt-10">
-            <h2 className="text-xl font-bold text-brand-black mb-4 text-center">Nossas redes sociais</h2>
-            <div className="flex items-center justify-center gap-3">
-              {contact.instagramUrl && (
-                <a
-                  href={contact.instagramUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                  className="w-12 h-12 flex items-center justify-center rounded-2xl shrink-0 shadow-sm transition-all duration-200 hover:scale-110 hover:shadow-md hover:-translate-y-0.5"
-                  style={{ background: "radial-gradient(circle at 30% 110%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%)" }}
-                >
-                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.75" aria-hidden="true">
-                    <rect x="3" y="3" width="18" height="18" rx="5" />
-                    <circle cx="12" cy="12" r="4" />
-                    <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none" />
-                  </svg>
-                </a>
-              )}
-              {contact.facebookUrl && (
-                <a
-                  href={contact.facebookUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Facebook"
-                  className="w-12 h-12 flex items-center justify-center rounded-full shrink-0 bg-[#1877F2] shadow-sm transition-all duration-200 hover:scale-110 hover:shadow-md hover:-translate-y-0.5"
-                >
-                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="white" aria-hidden="true">
-                    <path d="M14 9h2.5V6H14c-1.9 0-3.5 1.6-3.5 3.5V11H8v3h2.5v6h3v-6h2.5l.5-3h-3V9.8c0-.5.3-.8.5-.8Z" />
-                  </svg>
-                </a>
-              )}
-            </div>
-          </div>
-        )}
-
-        <div className="mt-10">
-          <h2 className="text-xl font-bold text-brand-black mb-4">Onde estamos</h2>
-          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-            <iframe
-              title="Localização da VS Motors"
-              src={`https://www.google.com/maps?q=${encodeURIComponent(contact.address)}&output=embed`}
-              className="w-full h-72 border-0"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-            <div className="p-4 flex items-center justify-between gap-3 flex-wrap">
-              <p className="text-sm text-gray-600">{contact.address}</p>
-              <a
-                href={GOOGLE_MAPS_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-semibold text-brand-red hover:underline shrink-0"
-              >
-                Abrir no Google Maps
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

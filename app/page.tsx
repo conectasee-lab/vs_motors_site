@@ -1,10 +1,11 @@
-import Link from "next/link";
 import { getVehicles } from "@/lib/vehicles-data";
 import VehicleCard from "@/components/VehicleCard";
+import HeroSearch from "@/components/HeroSearch";
+import Link from "next/link";
 
 export default async function HomePage() {
   const vehicles = await getVehicles();
-  const highlights = vehicles.slice(0, 3);
+  const highlights = vehicles.slice(0, 4);
 
   return (
     <div>
@@ -38,19 +39,7 @@ export default async function HomePage() {
           </div>
 
           <div className="bg-white rounded-xl p-5 shadow-2xl shadow-black/40">
-            <div className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="text"
-                placeholder="Buscar marca ou modelo — ex: Corolla, Onix"
-                className="flex-1 px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-red focus:border-transparent"
-              />
-              <Link
-                href="/estoque"
-                className="bg-brand-red hover:bg-red-700 text-white font-semibold px-8 py-3.5 rounded-lg transition-colors whitespace-nowrap flex items-center justify-center"
-              >
-                Buscar veículo
-              </Link>
-            </div>
+            <HeroSearch />
           </div>
         </div>
       </section>
@@ -95,8 +84,8 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="mb-12 flex items-end justify-between flex-wrap gap-4">
             <div>
-              <h2 className="text-3xl font-bold text-brand-black mb-2">Destaques do estoque</h2>
-              <p className="text-gray-600">Alguns dos veículos disponíveis agora em Jundiaí</p>
+              <h2 className="text-3xl font-bold text-brand-black mb-2">Últimos veículos cadastrados</h2>
+              <p className="text-gray-600">Os carros mais recentes que chegaram ao nosso estoque</p>
             </div>
             <Link
               href="/estoque"
@@ -105,8 +94,8 @@ export default async function HomePage() {
               Ver todo o estoque
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {highlights.map((v) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {highlights.slice(0, 3).map((v) => (
               <VehicleCard key={v.id} vehicle={v} />
             ))}
           </div>

@@ -13,6 +13,9 @@ export default function VehicleCard({
     <div className="group relative block bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-brand-black transition-colors duration-200">
       <Link href={`/estoque/${vehicle.id}`} className="block">
         <div className="relative w-full aspect-square bg-brand-black-soft overflow-hidden flex items-center justify-center p-3">
+          <span className="absolute top-3 left-3 z-10 bg-brand-red text-white text-xs font-semibold px-3 py-1.5 rounded-full shrink-0">
+            {vehicle.year}
+          </span>
           {vehicle.images.length > 0 ? (
             <Image
               src={vehicle.images[0]}

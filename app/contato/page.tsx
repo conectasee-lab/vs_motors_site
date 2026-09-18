@@ -13,9 +13,7 @@ export default async function ContatoPage() {
           <p><span className="text-brand-gold">Endereço:</span> {contact.address}</p>
           <p><span className="text-brand-gold">Horário:</span> Segunda a sábado, 9h às 18h</p>
         </div>
-        <div className="w-full h-64 bg-white border border-brand-gold/20 rounded-lg flex items-center justify-center text-gray-500">
-          Mapa (placeholder)
-        </div>
+      
       </div>
     </div>
   );
