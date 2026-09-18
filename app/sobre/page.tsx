@@ -1,6 +1,16 @@
+import Image from "next/image";
+
 export default function SobrePage() {
   return (
     <div className="min-h-screen w-full bg-gray-50">
+      <Image
+        src="/carros-seminovos-em-jundiai-Loja-Agencia-carro-veiculo-jundiai-01.png"
+        alt="Loja da VS Motors, revenda de carros seminovos em Jundiaí"
+        width={1910}
+        height={823}
+        className="w-full h-auto"
+        priority
+      />
       <div className="max-w-3xl mx-auto px-4 py-16">
         <h1 className="text-3xl font-bold text-brand-black mb-6">Nossa História</h1>
         <div className="space-y-4 text-gray-700">
