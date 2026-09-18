@@ -16,6 +16,17 @@
   --color-brand-red: #c8102e;
   --color-brand-gold: #d4af37;
   --color-brand-whatsapp: #25d366;
+
+  /* Dashboard-scoped palette: cool neutral surface + a single red accent
+     reserved for the revenue figure, with a graphite-steel second data
+     color for stock/inventory metrics. Not reused elsewhere in the site. */
+  --color-dash-surface: #f4f5f7;
+  --color-dash-panel: #ffffff;
+  --color-dash-ink: #14161a;
+  --color-dash-muted: #6e7480;
+  --color-dash-line: #e4e6eb;
+  --color-dash-steel: #2c3e52;
+  --color-dash-steel-soft: #3d5470;
 }
 
 body {

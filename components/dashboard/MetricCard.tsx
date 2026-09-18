@@ -1,30 +1,57 @@
-import type { ReactNode } from "react";
+type Accent = "red" | "steel" | "muted";
 
-const ACCENT_CLASSES: Record<"red" | "green" | "black", string> = {
-  red: "bg-brand-red/10 text-brand-red",
-  green: "bg-green-100 text-green-700",
-  black: "bg-brand-black/10 text-brand-black",
+const QUIET_BAR_CLASSES: Record<Accent, string> = {
+  red: "bg-brand-red",
+  steel: "bg-dash-steel",
+  muted: "bg-dash-muted",
+};
+
+const QUIET_VALUE_CLASSES: Record<Accent, string> = {
+  red: "text-brand-red",
+  steel: "text-dash-steel",
+  muted: "text-dash-ink",
 };
 
 export default function MetricCard({
   label,
   value,
-  accentColor,
-  icon,
+  caption,
+  accent,
+  variant = "quiet",
 }: {
   label: string;
   value: string;
-  accentColor: "red" | "green" | "black";
-  icon: ReactNode;
+  caption?: string;
+  accent: Accent;
+  variant?: "hero" | "quiet";
 }) {
-  return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center gap-4">
-      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${ACCENT_CLASSES[accentColor]}`}>
-        {icon}
+  if (variant === "hero") {
+    return (
+      <div className="bg-dash-steel rounded-sm p-6 sm:p-8 flex flex-col gap-1">
+        <p className="text-sm text-white/60">{label}</p>
+        <p
+          className="text-4xl sm:text-5xl font-medium text-brand-red tabular-nums"
+          style={{ fontFamily: "var(--font-dash-numeric)" }}
+        >
+          {value}
+        </p>
+        {caption ? <p className="text-sm text-white/70 mt-1">{caption}</p> : null}
       </div>
+    );
+  }
+
+  return (
+    <div className="bg-dash-panel border border-dash-line rounded-sm pl-4 pr-6 py-5 flex items-stretch gap-4">
+      <div className={`w-1 rounded-full ${QUIET_BAR_CLASSES[accent]}`} />
       <div>
-        <p className="text-sm text-gray-500 font-medium">{label}</p>
-        <p className="text-3xl font-bold text-brand-black">{value}</p>
+        <p className="text-sm text-dash-muted">{label}</p>
+        <p
+          className={`text-3xl font-medium tabular-nums ${QUIET_VALUE_CLASSES[accent]}`}
+          style={{ fontFamily: "var(--font-dash-numeric)" }}
+        >
+          {value}
+        </p>
+        {caption ? <p className="text-sm text-dash-muted mt-1">{caption}</p> : null}
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ export default function DashboardDateFilter({ initialAte }: { initialAte: string
   const router = useRouter();
 
   return (
-    <label className="flex items-center gap-2 text-sm font-medium text-gray-600">
+    <label className="flex items-center gap-2 text-sm text-dash-muted">
       Vendas até
       <input
         type="date"
@@ -21,7 +21,7 @@ export default function DashboardDateFilter({ initialAte }: { initialAte: string
           if (!e.target.value) return;
           router.push(`/admin/dashboard?ate=${e.target.value}`);
         }}
-        className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-brand-black"
+        className="border border-dash-line rounded-sm px-3 py-1.5 text-sm text-dash-ink bg-dash-panel"
       />
     </label>
   );

@@ -31,44 +31,41 @@ export default async function DashboardPage({
   ]);
 
   return (
-    <div className="min-h-screen w-full bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
-          <h1 className="text-2xl font-bold text-brand-black">Dashboard</h1>
-          <div className="flex items-center gap-4 flex-wrap">
+    <div className="min-h-screen w-full bg-dash-surface">
+      <div className="max-w-5xl mx-auto px-4 py-10">
+        <div className="flex items-end justify-between mb-8 flex-wrap gap-4 pb-6 border-b border-dash-line">
+          <div>
+            <h1 className="text-2xl font-medium text-dash-ink">Dashboard</h1>
+            <p className="text-sm text-dash-muted mt-1">Visão geral do estoque e das vendas</p>
+          </div>
+          <div className="flex items-center gap-3 flex-wrap">
             <DashboardDateFilter initialAte={ateDate} />
             <BackToEstoqueButton />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="mb-4">
           <MetricCard
-            label="Carros em Estoque"
-            value={String(estoqueTotal)}
-            accentColor="black"
-            icon={<span>🚗</span>}
-          />
-          <MetricCard
-            label="Carros Vendidos"
-            value={String(vendasResumo.quantidade)}
-            accentColor="green"
-            icon={<span>✅</span>}
-          />
-          <MetricCard
-            label="Faturamento"
+            label="Faturamento no período"
             value={currencyFormatter.format(vendasResumo.faturamento)}
-            accentColor="red"
-            icon={<span>💰</span>}
+            caption={`${vendasResumo.quantidade} ${vendasResumo.quantidade === 1 ? "carro vendido" : "carros vendidos"}`}
+            accent="red"
+            variant="hero"
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-brand-black mb-4">Estoque por Marca e Modelo</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+          <MetricCard label="Carros em estoque" value={String(estoqueTotal)} accent="steel" />
+          <MetricCard label="Vendidos no período" value={String(vendasResumo.quantidade)} accent="muted" />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-dash-panel border border-dash-line rounded-sm p-6">
+            <h2 className="text-base font-medium text-dash-ink mb-4">Estoque por marca e modelo</h2>
             <EstoquePorMarcaLista grupos={grupos} />
           </div>
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-brand-black mb-4">Estoque por Marca</h2>
+          <div className="bg-dash-panel border border-dash-line rounded-sm p-6">
+            <h2 className="text-base font-medium text-dash-ink mb-4">Distribuição por marca</h2>
             <EstoquePorMarcaPizza dados={dadosGrafico} />
           </div>
         </div>
