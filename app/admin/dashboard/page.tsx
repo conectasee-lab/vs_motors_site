@@ -11,7 +11,6 @@ import MetricCard from "@/components/dashboard/MetricCard";
 import DashboardDateFilter from "@/components/dashboard/DashboardDateFilter";
 import EstoquePorMarcaLista from "@/components/dashboard/EstoquePorMarcaLista";
 import EstoquePorMarcaPizza from "@/components/dashboard/EstoquePorMarcaPizza";
-import BackToEstoqueButton from "@/components/BackToEstoqueButton";
 
 const currencyFormatter = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
@@ -36,12 +35,9 @@ export default async function DashboardPage({
   return (
     <div className="min-h-screen w-full bg-dash-surface">
       <div className="max-w-5xl mx-auto px-4 py-10">
-        <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
-          <div>
-            <h1 className="text-2xl font-semibold text-dash-ink">Dashboard</h1>
-            <p className="text-sm text-dash-muted mt-1">Visão geral do estoque e das vendas</p>
-          </div>
-          <BackToEstoqueButton />
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold text-dash-ink">Dashboard</h1>
+          <p className="text-sm text-dash-muted mt-1">Visão geral do estoque e das vendas</p>
         </div>
 
         <div className="bg-dash-navy rounded-[20px] p-6 shadow-[0_8px_24px_-12px_rgba(27,35,64,0.18)] mb-5 flex flex-wrap items-start justify-between gap-6">
@@ -50,7 +46,7 @@ export default async function DashboardPage({
               <CurrencyIcon />
             </div>
             <div>
-              <p className="text-sm text-white/60 mb-1">Faturamento no período</p>
+              <p className="text-sm text-white/60 mb-1">Vendas no período</p>
               <p
                 className="text-3xl font-semibold tabular-nums text-white"
                 style={{ fontFamily: "var(--font-dash-numeric)" }}

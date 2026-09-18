@@ -8,7 +8,7 @@ import type { Brand } from "@/lib/brands";
 import type { BodyType } from "@/lib/body-types";
 import type { Accessory } from "@/lib/accessories";
 import VehicleCard from "@/components/VehicleCard";
-import EmployeeBar from "@/components/EmployeeBar";
+import AdminSidebar from "@/components/AdminSidebar";
 
 const PRICE_RANGES = [
   { label: "Até R$ 50 mil", min: undefined, max: 50000 },
@@ -483,11 +483,11 @@ export default function EstoqueFilters({
   );
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className={isLoggedIn ? "flex bg-gray-50 min-h-screen" : "bg-gray-50 min-h-screen"}>
+      {isLoggedIn && <AdminSidebar />}
+      <div className="flex-1 min-w-0">
       <div className="max-w-6xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-brand-black mb-6">Estoque</h1>
-
-        {isLoggedIn && <EmployeeBar />}
 
         <BrandCarousel brands={brandOptions} activeBrandId={filters.brandId} onSelect={(id) => update("brandId", id)} />
 
@@ -578,6 +578,7 @@ export default function EstoqueFilters({
             </div>
           )}
         </div>
+      </div>
       </div>
 
       {filtersOpen && (

@@ -2,8 +2,6 @@ import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { getAccessories } from "@/lib/accessories";
 import { deleteAccessoryAction } from "./actions";
-import BackToEstoqueButton from "@/components/BackToEstoqueButton";
-import DashboardLinkButton from "@/components/DashboardLinkButton";
 
 export default async function AcessoriosPage() {
   await requireUser();
@@ -18,8 +16,6 @@ export default async function AcessoriosPage() {
             <Link href="/admin/acessorios/novo" className="px-4 py-2 bg-brand-red text-white font-semibold rounded-lg text-sm">
               Novo acessório
             </Link>
-            <DashboardLinkButton />
-            <BackToEstoqueButton />
           </div>
         </div>
 
