@@ -3,6 +3,7 @@ import Image from "next/image";
 import { requireUser } from "@/lib/auth";
 import { getBrands } from "@/lib/brands";
 import { deleteBrandAction } from "./actions";
+import BackToEstoqueButton from "@/components/BackToEstoqueButton";
 
 export default async function MarcasPage() {
   await requireUser();
@@ -13,9 +14,12 @@ export default async function MarcasPage() {
     <div className="max-w-2xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-brand-black">Marcas</h1>
-        <Link href="/admin/marcas/nova" className="px-4 py-2 bg-brand-red text-white font-semibold rounded-lg text-sm">
-          Nova marca
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/admin/marcas/nova" className="px-4 py-2 bg-brand-red text-white font-semibold rounded-lg text-sm">
+            Nova marca
+          </Link>
+          <BackToEstoqueButton />
+        </div>
       </div>
 
       {brands.length === 0 ? (

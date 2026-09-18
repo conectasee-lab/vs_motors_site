@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { updateCompanyContactAction } from "./actions";
 import type { CompanyContact } from "@/lib/company-contact";
+import BackToEstoqueButton from "@/components/BackToEstoqueButton";
 
 type State = { error: string | null; success: boolean };
 
@@ -67,13 +68,16 @@ export default function ContatoForm({ contact }: { contact: CompanyContact }) {
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}
       {state.success && <p className="text-sm text-green-600">Dados de contato atualizados.</p>}
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="px-5 py-2.5 bg-brand-red text-white font-semibold rounded-lg disabled:opacity-60"
-      >
-        {pending ? "Salvando..." : "Salvar"}
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          type="submit"
+          disabled={pending}
+          className="px-5 py-2.5 bg-brand-red text-white font-semibold rounded-lg disabled:opacity-60"
+        >
+          {pending ? "Salvando..." : "Salvar"}
+        </button>
+        <BackToEstoqueButton />
+      </div>
     </form>
   );
 }

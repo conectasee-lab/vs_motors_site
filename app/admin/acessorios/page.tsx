@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { getAccessories } from "@/lib/accessories";
 import { deleteAccessoryAction } from "./actions";
+import BackToEstoqueButton from "@/components/BackToEstoqueButton";
 
 export default async function AcessoriosPage() {
   await requireUser();
@@ -12,9 +13,12 @@ export default async function AcessoriosPage() {
       <div className="max-w-2xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-brand-black">Acessórios</h1>
-          <Link href="/admin/acessorios/novo" className="px-4 py-2 bg-brand-red text-white font-semibold rounded-lg text-sm">
-            Novo acessório
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link href="/admin/acessorios/novo" className="px-4 py-2 bg-brand-red text-white font-semibold rounded-lg text-sm">
+              Novo acessório
+            </Link>
+            <BackToEstoqueButton />
+          </div>
         </div>
 
         {accessories.length === 0 ? (

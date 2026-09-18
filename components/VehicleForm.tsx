@@ -7,6 +7,7 @@ import type { Brand } from "@/lib/brands";
 import type { Accessory } from "@/lib/accessories";
 import type { BodyType } from "@/lib/body-types";
 import { MAX_PHOTOS_PER_VEHICLE } from "@/lib/vehicle-photos";
+import BackToEstoqueButton from "@/components/BackToEstoqueButton";
 
 const YEAR_OPTIONS = Array.from({ length: 2040 - 1960 + 1 }, (_, i) => 2040 - i);
 
@@ -234,13 +235,16 @@ export default function VehicleForm({ action, vehicle, brands, bodyTypes, access
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={pending || remaining < 0}
-        className="px-5 py-2.5 bg-brand-red text-white font-semibold rounded-lg disabled:opacity-60"
-      >
-        {pending ? "Salvando..." : "Salvar"}
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          type="submit"
+          disabled={pending || remaining < 0}
+          className="px-5 py-2.5 bg-brand-red text-white font-semibold rounded-lg disabled:opacity-60"
+        >
+          {pending ? "Salvando..." : "Salvar"}
+        </button>
+        <BackToEstoqueButton />
+      </div>
     </form>
   );
 }

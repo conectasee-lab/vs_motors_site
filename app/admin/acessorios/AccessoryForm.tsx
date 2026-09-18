@@ -1,6 +1,7 @@
 "use client";
 
 import type { Accessory } from "@/lib/accessories";
+import BackToEstoqueButton from "@/components/BackToEstoqueButton";
 
 type Props = {
   action: (formData: FormData) => void;
@@ -24,13 +25,16 @@ export default function AccessoryForm({ action, accessory, pending, error }: Pro
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="px-5 py-2.5 bg-brand-red text-white font-semibold rounded-lg disabled:opacity-60"
-      >
-        {pending ? "Salvando..." : "Salvar"}
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          type="submit"
+          disabled={pending}
+          className="px-5 py-2.5 bg-brand-red text-white font-semibold rounded-lg disabled:opacity-60"
+        >
+          {pending ? "Salvando..." : "Salvar"}
+        </button>
+        <BackToEstoqueButton />
+      </div>
     </form>
   );
 }

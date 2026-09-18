@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { createEmployeeAction, resetPasswordAction } from "./actions";
+import BackToEstoqueButton from "@/components/BackToEstoqueButton";
 
 type State = { error: string | null };
 type UserRow = { id: string; email: string };
@@ -41,9 +42,12 @@ export default function UsuariosForms({ users }: { users: UserRow[] }) {
           </select>
           <input name="password" type="password" placeholder="Nova senha" required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900" />
           {resetState.error && <p className="text-sm text-red-600">{resetState.error}</p>}
-          <button type="submit" disabled={resetPending} className="px-4 py-2 bg-brand-red text-white font-semibold rounded-lg text-sm disabled:opacity-60">
-            {resetPending ? "Salvando..." : "Redefinir senha"}
-          </button>
+          <div className="flex items-center gap-3">
+            <button type="submit" disabled={resetPending} className="px-4 py-2 bg-brand-red text-white font-semibold rounded-lg text-sm disabled:opacity-60">
+              {resetPending ? "Salvando..." : "Redefinir senha"}
+            </button>
+            <BackToEstoqueButton />
+          </div>
         </form>
       </section>
     </div>
