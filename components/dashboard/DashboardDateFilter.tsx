@@ -2,6 +2,11 @@
 
 import { useRouter } from "next/navigation";
 
+function firstDayOfCurrentMonth(): string {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+}
+
 export default function DashboardDateFilter({ initialAte }: { initialAte: string }) {
   const router = useRouter();
 
@@ -11,7 +16,11 @@ export default function DashboardDateFilter({ initialAte }: { initialAte: string
       <input
         type="date"
         defaultValue={initialAte}
-        onChange={(e) => router.push(`/admin/dashboard?ate=${e.target.value}`)}
+        min={firstDayOfCurrentMonth()}
+        onChange={(e) => {
+          if (!e.target.value) return;
+          router.push(`/admin/dashboard?ate=${e.target.value}`);
+        }}
         className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-brand-black"
       />
     </label>

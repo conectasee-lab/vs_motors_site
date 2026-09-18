@@ -21,7 +21,7 @@ export default async function DashboardPage({
 }) {
   await requireUser();
   const { ate } = await searchParams;
-  const ateDate = ate ?? defaultAteDate();
+  const ateDate = ate && /^\d{4}-\d{2}-\d{2}$/.test(ate) ? ate : defaultAteDate();
 
   const [estoqueTotal, vendasResumo, grupos, dadosGrafico] = await Promise.all([
     getEstoqueTotal(),
