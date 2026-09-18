@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { logoutAction } from "@/app/login/actions";
+import DashboardLinkButton from "@/components/DashboardLinkButton";
 
 export default function EmployeeBar() {
   return (
@@ -10,6 +11,7 @@ export default function EmployeeBar() {
       >
         Cadastrar veículo
       </Link>
+      <DashboardLinkButton />
       <Link
         href="/admin/usuarios"
         className="text-sm font-semibold text-white border border-brand-gold/40 px-4 py-2 rounded hover:bg-brand-black-soft transition-colors"

@@ -4,6 +4,7 @@ import { requireUser } from "@/lib/auth";
 import { getBrands } from "@/lib/brands";
 import { deleteBrandAction } from "./actions";
 import BackToEstoqueButton from "@/components/BackToEstoqueButton";
+import DashboardLinkButton from "@/components/DashboardLinkButton";
 
 export default async function MarcasPage() {
   await requireUser();
@@ -18,6 +19,7 @@ export default async function MarcasPage() {
           <Link href="/admin/marcas/nova" className="px-4 py-2 bg-brand-red text-white font-semibold rounded-lg text-sm">
             Nova marca
           </Link>
+          <DashboardLinkButton />
           <BackToEstoqueButton />
         </div>
       </div>
