@@ -5,7 +5,7 @@ export default function SobrePage() {
         {/* Hero background photo */}
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/carros-seminovos-em-jundiai-Loja-Agencia-carro-veiculo-jundiai-02.png')" }}
+          style={{ backgroundImage: "url('/carros-seminovos-em-jundiai-Loja-Agencia-carro-veiculo-jundiai-01.png')" }}
           aria-hidden="true"
         />
         {/* Dark overlay for text legibility */}
@@ -20,11 +20,14 @@ export default function SobrePage() {
 
         <div className="relative max-w-3xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-[1.1] tracking-tight">
-            O carro certo, revisado e pronto para rodar
+            Conheça a história da Vs Motors.
+            Loja e Agência de Veículos em Jundiái.
+
           </h1>
           <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
-            Em Jundiaí, cada veículo passa por inspeção antes de chegar até você.
-            Negocie direto pelo WhatsApp, sem enrolação.
+            Carros Seminovos e Usados em Jundiaí e Região.</p>
+            <p>
+            As Melhores Ofertas.
           </p>
         </div>
       </section>
@@ -38,13 +41,16 @@ export default function SobrePage() {
             o cliente em primeiro lugar.
           </p>
           <p>
-            Cada carro do nosso estoque passa por uma criteriosa avaliação antes
-            de chegar até você, garantindo procedência, qualidade mecânica e
-            documentação em dia.
+            E você está pesquisando as melhores lojas de carros em Jundiaí, encontrou a
+            agência de veículos ideal para realizar o seu negócio. Nossa revenda conta 
+            com um estoque completo e rigorosamente periciado de carros seminovos em Jundiaí, 
+            atendendo também clientes de Várzea Paulista, Campo Limpo Paulista, Itupeva, Louveira, Vinhedo entre 
+            outras regiões.
           </p>
           <p>
-            Hoje, a VS Motors é referência para quem busca comprar ou vender um
-            veículo com segurança e o melhor atendimento da região.
+            <b>Por que escolher nossa revenda de veículos em Jundiaí? </b>
+            Comprar um carro seminovo em Jundiaí exige procedência, transparência e as melhores condições de pagamento 
+            do mercado. Em nosso estacionamento de carros em Jundiaí, você encontra:
           </p>
         </div>
       </div>

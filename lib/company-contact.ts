@@ -9,7 +9,7 @@ export type CompanyContact = {
 };
 
 const FALLBACK_CONTACT: CompanyContact = {
-  whatsapp: "(00) 90000-0000",
+  whatsapp: "11930546587",
   email: "contato@vsmotors.com.br",
   address: "Av. Quatorze de Dezembro, 1300 - Vila Mafalda, Jundiaí - SP, 13206-105",
   instagramUrl: "",

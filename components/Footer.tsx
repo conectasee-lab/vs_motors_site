@@ -7,8 +7,10 @@ export default async function Footer() {
     <footer className="bg-brand-black mt-16">
       <div className="max-w-6xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-3 text-sm text-gray-400">
         <div>
-          <p className="text-white font-bold text-lg mb-2">VS Motors</p>
-          <p className="leading-relaxed">Qualidade e confiança na hora de comprar seu carro.</p>
+          <p className="text-brand-red font-semibold text-lg mb-3">VS Motors</p>
+          <p className="leading-relaxed">Qualidade e confiança na hora de comprar seu carro.
+            Atendemos Jundiaí, Várzea Paulista, Campo Limpo Paulista, Itupeva, Louveira e Cabreúva.
+          </p>
         </div>
         <div>
           <p className="text-brand-red font-semibold text-lg mb-3">Contato</p>
@@ -27,6 +29,10 @@ export default async function Footer() {
         <span className="text-gray-700">·</span>
         <a href="/login" className="text-xs text-gray-600 hover:text-gray-400">
           Área restrita
+        </a>
+        <span className="text-gray-700">·</span>
+           <a href="https://geeo4.com.br/" className="text-xs text-gray-600 hover:text-gray-400">
+          Desenvolvido por GEEO4
         </a>
       </div>
     </footer>

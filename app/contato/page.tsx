@@ -9,7 +9,7 @@ export default async function ContatoPage() {
         {/* Hero background photo */}
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/carros-seminovos-em-jundiai-Loja-Agencia-carro-veiculo-jundiai-02.png')" }}
+          style={{ backgroundImage: "url('/carros-seminovos-em-jundiai-Loja-Agencia-carro-veiculo-jundiai-04.png')" }}
           aria-hidden="true"
         />
         {/* Dark overlay for text legibility */}
@@ -24,11 +24,11 @@ export default async function ContatoPage() {
 
         <div className="relative max-w-3xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-[1.1] tracking-tight">
-            O carro certo, revisado e pronto para rodar
+            Carros Seminovos e Usados em Jundiaí: 
           </h1>
           <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
-            Em Jundiaí, cada veículo passa por inspeção antes de chegar até você.
-            Negocie direto pelo WhatsApp, sem enrolação.
+            As Melhores Ofertas de Agência de Veículos com Entrada Facilitada.
+            Encontre Seu Carro Seminovo em Jundiaí com Condições Exclusivas.
           </p>
         </div>
       </section>
