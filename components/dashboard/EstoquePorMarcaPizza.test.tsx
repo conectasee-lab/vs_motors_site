@@ -59,4 +59,18 @@ describe("EstoquePorMarcaPizza", () => {
     expect(screen.getAllByText("2")).not.toHaveLength(0);
     expect(screen.getAllByText("1")).not.toHaveLength(0);
   });
+
+  it("does not scroll the legend when there are 6 or fewer brands", () => {
+    const dados = Array.from({ length: 6 }, (_, i) => ({ marca: `Marca ${i}`, quantidade: 1 }));
+    render(<EstoquePorMarcaPizza dados={dados} />);
+
+    expect(screen.getByText("Marca 0").closest("ul")).not.toHaveClass("overflow-y-auto");
+  });
+
+  it("scrolls the legend when there are more than 6 brands", () => {
+    const dados = Array.from({ length: 7 }, (_, i) => ({ marca: `Marca ${i}`, quantidade: 1 }));
+    render(<EstoquePorMarcaPizza dados={dados} />);
+
+    expect(screen.getByText("Marca 0").closest("ul")).toHaveClass("overflow-y-auto");
+  });
 });
