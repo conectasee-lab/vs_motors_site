@@ -21,7 +21,7 @@ export default function DashboardDateFilter({ initialAte }: { initialAte: string
           if (!e.target.value) return;
           router.push(`/admin/dashboard?ate=${e.target.value}`);
         }}
-        className="border border-dash-line rounded-sm px-3 py-1.5 text-sm text-dash-ink bg-dash-panel"
+        className="border-none rounded-full px-4 py-2 text-sm text-dash-ink bg-dash-panel shadow-[0_4px_12px_-6px_rgba(27,35,64,0.15)]"
       />
     </label>
   );

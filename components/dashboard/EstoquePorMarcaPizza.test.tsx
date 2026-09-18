@@ -12,7 +12,7 @@ beforeAll(() => {
   });
   Object.defineProperty(HTMLElement.prototype, "offsetHeight", {
     configurable: true,
-    value: 280,
+    value: 220,
   });
 
   class MockResizeObserver {
@@ -25,7 +25,7 @@ beforeAll(() => {
         [
           {
             target,
-            contentRect: { width: 500, height: 280 } as DOMRectReadOnly,
+            contentRect: { width: 500, height: 220 } as DOMRectReadOnly,
           } as ResizeObserverEntry,
         ],
         this as unknown as ResizeObserver
@@ -44,7 +44,7 @@ describe("EstoquePorMarcaPizza", () => {
     expect(screen.getByText("Nenhum veículo em estoque.")).toBeInTheDocument();
   });
 
-  it("shows the total vehicle count in the donut's center", () => {
+  it("shows the total in the donut's center and a legend row per brand with its percentage", () => {
     render(
       <EstoquePorMarcaPizza
         dados={[
@@ -56,5 +56,9 @@ describe("EstoquePorMarcaPizza", () => {
 
     expect(screen.getByText("3")).toBeInTheDocument();
     expect(screen.getByText("em estoque")).toBeInTheDocument();
+    expect(screen.getByText("Toyota")).toBeInTheDocument();
+    expect(screen.getByText("67%")).toBeInTheDocument();
+    expect(screen.getByText("Chevrolet")).toBeInTheDocument();
+    expect(screen.getByText("33%")).toBeInTheDocument();
   });
 });
