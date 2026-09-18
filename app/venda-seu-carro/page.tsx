@@ -16,7 +16,7 @@ export default function VendaSeuCarroPage() {
         {/* Hero background photo */}
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/carros-seminovos-em-jundiai-Loja-Agencia-carro-veiculo-jundiai-02.png')" }}
+          style={{ backgroundImage: "url('/carros-seminovos-em-jundiai-Loja-Agencia-carro-veiculo-jundiai-03.png')" }}
           aria-hidden="true"
         />
         {/* Dark overlay for text legibility */}
@@ -68,6 +68,40 @@ export default function VendaSeuCarroPage() {
           </form>
         )}
       </div>
+
+      <section className="bg-gray-100 py-16 px-4">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl font-bold text-brand-black text-center mb-10">Conheça as suas opções</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <p className="text-3xl font-bold text-brand-red mb-3">01</p>
+              <h3 className="font-bold text-brand-black tracking-wide mb-3">VENDA NA HORA!</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Para quem precisa de dinheiro na hora! Compramos o seu veículo e
+                pagamos à vista. Simples assim.
+              </p>
+            </div>
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <p className="text-3xl font-bold text-brand-red mb-3">02</p>
+              <h3 className="font-bold text-brand-black tracking-wide mb-3">TROCO NA TROCA</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Para quem quer sair de carro novo! Você pode trocar o seu veículo
+                por outro de maior ou menor valor. Se for maior, negociamos a
+                diferença. Se for menor, já sai com o dinheiro no bolso.
+              </p>
+            </div>
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <p className="text-3xl font-bold text-brand-red mb-3">03</p>
+              <h3 className="font-bold text-brand-black tracking-wide mb-3">CONSIGNAÇÃO</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Mais segurança e rentabilidade para você! Anunciamos seu veículo
+                nos principais portais e passamos as propostas. Quando vendido,
+                você recebe o valor à vista.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
