@@ -43,8 +43,11 @@ export default function AdminSidebar() {
         <div className="md:hidden fixed inset-0 z-40 bg-black/50" onClick={() => setOpen(false)} />
       )}
 
+      {/* Reserva o espaço do menu no layout, já que ele é fixo (fora do fluxo) */}
+      <div aria-hidden="true" className="hidden md:block w-64 shrink-0" />
+
       <aside
-        className={`w-64 shrink-0 bg-brand-black border-r border-brand-gold/20 min-h-screen flex flex-col fixed inset-y-0 left-0 z-50 transition-transform duration-200 md:static md:translate-x-0 ${
+        className={`w-64 shrink-0 bg-brand-black border-r border-brand-gold/20 min-h-screen flex flex-col fixed inset-y-0 left-0 z-50 transition-transform duration-200 md:top-[121px] md:min-h-0 md:z-40 md:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >

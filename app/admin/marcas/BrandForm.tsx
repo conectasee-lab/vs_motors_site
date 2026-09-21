@@ -19,7 +19,7 @@ export default function BrandForm({ action, brand, pending, error }: Props) {
           name="name"
           defaultValue={brand?.name}
           required
-          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-black"
         />
       </div>
       <div>

@@ -19,7 +19,7 @@ export default function Header() {
   return (
     <header className="bg-brand-black border-b border-gray-800 sticky top-0 z-50 shadow-sm">
       <div className="bg-brand-red text-white text-center text-xs sm:text-sm font-medium py-2 px-4">
-        <span className="font-semibold">Horário de atendimento:</span> Segunda a sexta– 8:00 às 18:00 | Sábado das 8:00 às 13:00
+        <span className="font-semibold">Horário de atendimento:</span> Segunda a sexta– 8:30 às 18:00 | Sábado das 8:30 às 14:00
       </div>
 
       <div className="max-w-6xl mx-auto flex items-center justify-between px-4 py-4">

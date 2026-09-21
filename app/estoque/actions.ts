@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { validatePhotos, sanitizeFileName } from "@/lib/vehicle-photos";
+import { validatePhotos, sanitizeFileName, orderImagesWithFeatured } from "@/lib/vehicle-photos";
 
 type ActionResult = { error: string | null };
 
@@ -60,6 +60,9 @@ async function syncVehicleAccessories(
 function validateVehicleFields(
   fields: ReturnType<typeof parseVehicleFields>
 ): string | null {
+  if (!fields.brand_id) {
+    return "Selecione a marca do veículo.";
+  }
   if (!fields.model || !fields.fuel || !fields.color || !fields.body_type_id) {
     return "Preencha todos os campos obrigatórios.";
   }
@@ -115,7 +118,8 @@ export async function createVehicleAction(formData: FormData): Promise<ActionRes
   if (insertError) return { error: `Falha ao salvar veículo: ${insertError.message}` };
 
   try {
-    const images = photos.length > 0 ? await uploadPhotos(supabase, inserted.id, photos) : [];
+    const uploaded = photos.length > 0 ? await uploadPhotos(supabase, inserted.id, photos) : [];
+    const images = orderImagesWithFeatured([], uploaded, String(formData.get("featured") ?? "") || null);
     if (images.length > 0) {
       const { error: updateError } = await supabase
         .from("vehicles")
@@ -166,7 +170,7 @@ export async function updateVehicleAction(
 
   const { error } = await supabase
     .from("vehicles")
-    .update({ ...fields, images: [...existingImages, ...newImages] })
+    .update({ ...fields, images: orderImagesWithFeatured(existingImages, newImages, String(formData.get("featured") ?? "") || null) })
     .eq("id", id);
 
   if (error) return { error: `Falha ao atualizar veículo: ${error.message}` };

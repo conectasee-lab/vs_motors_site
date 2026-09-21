@@ -161,26 +161,31 @@ describe("updateVehicleAction", () => {
   });
 });
 
-describe("createVehicleAction field parsing", () => {
-  it("saves brand_id as null when no brand is selected", async () => {
+describe("brand validation", () => {
+  it("rejects creating a vehicle without a brand", async () => {
     requireUserMock.mockResolvedValueOnce({ id: "u1" });
-    const singleMock = vi.fn().mockResolvedValue({ data: { id: "v1" }, error: null });
-    const selectMock = vi.fn(() => ({ single: singleMock }));
-    const insertMock = vi.fn(() => ({ select: selectMock }));
-    fromMock.mockImplementation((table: string) => {
-      expect(table).toBe("vehicles");
-      return { insert: insertMock };
-    });
-
+    fromMock.mockClear();
     const { createVehicleAction } = await import("./actions");
     const fd = baseFormData();
     fd.set("brand_id", "");
 
-    await createVehicleAction(fd);
+    const result = await createVehicleAction(fd);
 
-    expect(insertMock).toHaveBeenCalledWith(
-      expect.objectContaining({ brand_id: null }),
-    );
+    expect(result).toEqual({ error: "Selecione a marca do veículo." });
+    expect(fromMock).not.toHaveBeenCalled();
+  });
+
+  it("rejects updating a vehicle without a brand", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
+    fromMock.mockClear();
+    const { updateVehicleAction } = await import("./actions");
+    const fd = baseFormData();
+    fd.set("brand_id", "");
+
+    const result = await updateVehicleAction("v1", fd);
+
+    expect(result).toEqual({ error: "Selecione a marca do veículo." });
+    expect(fromMock).not.toHaveBeenCalled();
   });
 });
 

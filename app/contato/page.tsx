@@ -38,7 +38,7 @@ export default async function ContatoPage() {
           <p><span className="text-brand-gold">WhatsApp:</span> {contact.whatsapp}</p>
           <p><span className="text-brand-gold">E-mail:</span> {contact.email}</p>
           <p><span className="text-brand-gold">Endereço:</span> {contact.address}</p>
-          <p><span className="text-brand-gold">Horário:</span> Segunda a sábado, 9h às 18h</p>
+          <p><span className="text-brand-gold">Horário:</span> Segunda a sexta– 8:30 às 18:00 | Sábado das 8:30 às 14:00</p>
         </div>
       
       </div>

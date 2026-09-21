@@ -27,3 +27,20 @@ export function validatePhotos(
 
   return { error: null };
 }
+
+/**
+ * Orders images so the featured one comes first (the site uses images[0] as cover).
+ * `featured` is either a kept image URL or "new:<index>" pointing into `uploaded`.
+ */
+export function orderImagesWithFeatured(
+  kept: string[],
+  uploaded: string[],
+  featured: string | null
+): string[] {
+  const all = [...kept, ...uploaded];
+  let featuredUrl: string | undefined;
+  if (featured?.startsWith("new:")) featuredUrl = uploaded[Number(featured.slice(4))];
+  else if (featured && kept.includes(featured)) featuredUrl = featured;
+  if (!featuredUrl) return all;
+  return [featuredUrl, ...all.filter((u) => u !== featuredUrl)];
+}

@@ -35,11 +35,29 @@ type Props = {
   error: string | null;
 };
 
+function FeaturedButton({ active, onClick }: { active: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      aria-label={active ? "Foto de destaque" : "Definir como destaque"}
+      className={`absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[10px] font-semibold leading-none ${
+        active ? "bg-brand-red text-white" : "bg-black/60 text-white hover:bg-black/80"
+      }`}
+    >
+      {active ? "★ Destaque" : "☆ Destaque"}
+    </button>
+  );
+}
+
 export default function VehicleForm({ action, vehicle, brands, bodyTypes, accessories, pending, error }: Props) {
   const [keptImages, setKeptImages] = useState<string[]>(() => vehicle?.images ?? []);
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [featuredKey, setFeaturedKey] = useState<string | null>(null);
+  const [featuredNewFile, setFeaturedNewFile] = useState<File | null>(null);
   const remaining = MAX_PHOTOS_PER_VEHICLE - keptImages.length - photoFiles.length;
 
   useEffect(() => {
@@ -54,6 +72,15 @@ export default function VehicleForm({ action, vehicle, brands, bodyTypes, access
     if (fileInputRef.current) fileInputRef.current.files = dataTransfer.files;
     setPhotoFiles(files);
   }
+
+  const newIndexOfFeatured = featuredNewFile ? photoFiles.indexOf(featuredNewFile) : -1;
+  // Effective featured: explicit choice, else the current cover (first kept), else first new photo.
+  const featured: string | null =
+    newIndexOfFeatured >= 0
+      ? `new:${newIndexOfFeatured}`
+      : featuredKey && keptImages.includes(featuredKey)
+        ? featuredKey
+        : keptImages[0] ?? (photoFiles.length > 0 ? "new:0" : null);
 
   function removeNewPhoto(index: number) {
     updateFileInput(photoFiles.filter((_, i) => i !== index));
@@ -73,8 +100,8 @@ export default function VehicleForm({ action, vehicle, brands, bodyTypes, access
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Marca</label>
-          <select name="brand_id" defaultValue={vehicle?.brand?.id ?? ""} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900">
-            <option value="">Selecione uma marca</option>
+          <select name="brand_id" defaultValue={vehicle?.brand?.id ?? ""} required className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900">
+            <option value="" disabled>Selecione uma marca</option>
             {brands.map((b) => (
               <option key={b.id} value={b.id}>{b.name}</option>
             ))}
@@ -190,6 +217,10 @@ export default function VehicleForm({ action, vehicle, brands, bodyTypes, access
               <div key={url} className="relative w-full aspect-square rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
                 <Image src={url} alt="Foto do veículo" fill className="object-cover" />
                 <input type="hidden" name="kept_images" value={url} />
+                <FeaturedButton
+                  active={featured === url}
+                  onClick={() => { setFeaturedKey(url); setFeaturedNewFile(null); }}
+                />
                 <button
                   type="button"
                   onClick={() => setKeptImages((imgs) => imgs.filter((u) => u !== url))}
@@ -219,6 +250,10 @@ export default function VehicleForm({ action, vehicle, brands, bodyTypes, access
               <div key={url} className="relative w-full aspect-square rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={url} alt="Prévia da nova foto" className="w-full h-full object-cover" />
+                <FeaturedButton
+                  active={featured === `new:${i}`}
+                  onClick={() => { setFeaturedNewFile(photoFiles[i]); setFeaturedKey(null); }}
+                />
                 <button
                   type="button"
                   onClick={() => removeNewPhoto(i)}
@@ -232,6 +267,8 @@ export default function VehicleForm({ action, vehicle, brands, bodyTypes, access
           </div>
         )}
       </div>
+
+      <input type="hidden" name="featured" value={featured ?? ""} />
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 
