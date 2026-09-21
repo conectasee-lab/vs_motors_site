@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SocialAndMap from "@/components/SocialAndMap";
+import SocialAndMapGate from "@/components/SocialAndMapGate";
 import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
 import "./globals.css";
 
@@ -30,7 +31,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <Header />
         <main className="min-h-screen flex-1">{children}</main>
-        <SocialAndMap />
+        <SocialAndMapGate>
+          <SocialAndMap />
+        </SocialAndMapGate>
         <Footer />
         <FloatingWhatsAppButton />
       </body>
