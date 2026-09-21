@@ -62,7 +62,7 @@ export default function Header() {
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className={`py-3 text-sm font-medium transition-colors hover:text-brand-red ${
+              className={`py-3 text-center text-sm font-medium transition-colors hover:text-brand-red ${
                 pathname === item.href ? "text-brand-red" : "text-white"
               }`}
             >

@@ -18,13 +18,13 @@ export default function SobrePage() {
           aria-hidden="true"
         />
 
-        <div className="relative max-w-3xl mx-auto">
+        <div className="relative max-w-3xl mx-auto text-center md:text-left">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-[1.1] tracking-tight">
             Conheça a história da Vs Motors.
             Loja e Agência de Veículos em Jundiái.
 
           </h1>
-          <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
+          <p className="text-lg text-gray-400 leading-relaxed max-w-xl mx-auto md:mx-0">
             Carros Seminovos e Usados em Jundiaí e Região.</p>
             <p>
             As Melhores Ofertas.
@@ -32,7 +32,7 @@ export default function SobrePage() {
         </div>
       </section>
       <div className="max-w-3xl mx-auto px-4 py-16">
-        <h2 className="text-3xl font-bold text-brand-black mb-6">Nossa História</h2>
+        <h2 className="text-3xl font-bold text-brand-black mb-6 text-center md:text-left">Nossa História</h2>
         <div className="space-y-4 text-gray-700">
           <p>
             A VS Motors nasceu do sonho de oferecer veículos de qualidade com

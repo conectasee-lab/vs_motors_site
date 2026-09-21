@@ -22,18 +22,18 @@ export default async function ContatoPage() {
           aria-hidden="true"
         />
 
-        <div className="relative max-w-3xl mx-auto">
+        <div className="relative max-w-3xl mx-auto text-center md:text-left">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-[1.1] tracking-tight">
             Carros Seminovos e Usados em Jundiaí: 
           </h1>
-          <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
+          <p className="text-lg text-gray-400 leading-relaxed max-w-xl mx-auto md:mx-0">
             As Melhores Ofertas de Agência de Veículos com Entrada Facilitada.
             Encontre Seu Carro Seminovo em Jundiaí com Condições Exclusivas.
           </p>
         </div>
       </section>
       <div className="max-w-3xl mx-auto px-4 py-16">
-        <h2 className="text-3xl font-bold text-brand-black mb-6">Contato</h2>
+        <h2 className="text-3xl font-bold text-brand-black mb-6 text-center md:text-left">Contato</h2>
         <div className="space-y-2 text-gray-700 mb-8">
           <p><span className="text-brand-gold">WhatsApp:</span> {contact.whatsapp}</p>
           <p><span className="text-brand-gold">E-mail:</span> {contact.email}</p>

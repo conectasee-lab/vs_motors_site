@@ -29,18 +29,18 @@ export default function VendaSeuCarroPage() {
           aria-hidden="true"
         />
 
-        <div className="relative max-w-3xl mx-auto">
+        <div className="relative max-w-3xl mx-auto text-center md:text-left">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-[1.1] tracking-tight">
             O carro certo, revisado e pronto para rodar
           </h1>
-          <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
+          <p className="text-lg text-gray-400 leading-relaxed max-w-xl mx-auto md:mx-0">
             Em Jundiaí, cada veículo passa por inspeção antes de chegar até você.
             Negocie direto pelo WhatsApp, sem enrolação.
           </p>
         </div>
       </section>
       <div className="max-w-xl mx-auto px-4 py-16">
-        <h2 className="text-3xl font-bold text-brand-black mb-2">Venda seu Carro</h2>
+        <h2 className="text-3xl font-bold text-brand-black mb-2 text-center md:text-left">Venda seu Carro</h2>
         <p className="text-gray-600 mb-8">
           Preencha os dados abaixo e nossa equipe entrará em contato para
           avaliar seu veículo.

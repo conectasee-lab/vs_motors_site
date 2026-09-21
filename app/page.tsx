@@ -27,12 +27,12 @@ export default async function HomePage() {
           aria-hidden="true"
         />
 
-        <div className="relative max-w-3xl mx-auto">
+        <div className="relative max-w-3xl mx-auto text-center md:text-left">
           <div className="mb-10">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-[1.1] tracking-tight">
               Carros Seminovos e Usados em Jundiaí e Região | As Melhores Ofertas
             </h1>
-            <p className="text-lg text-gray-400 leading-relaxed max-w-xl">
+            <p className="text-lg text-gray-400 leading-relaxed max-w-xl mx-auto md:mx-0">
               Procurando por carros usados em Jundiaí com garantia e facilidade de financiamento? 
               Confira o estoque da nossa loja e garanta seu seminovo em Jundiaí e região.
             </p>
@@ -82,8 +82,8 @@ export default async function HomePage() {
       {/* Highlights */}
       <section className="bg-gray-50 py-20 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-12 flex items-end justify-between flex-wrap gap-4">
-            <div>
+          <div className="mb-12 flex items-end justify-center md:justify-between flex-wrap gap-4">
+            <div className="w-full md:w-auto text-center md:text-left">
               <h2 className="text-3xl font-bold text-brand-black mb-2">Últimos veículos cadastrados</h2>
               <p className="text-gray-600">Os carros mais recentes que chegaram ao nosso estoque</p>
             </div>

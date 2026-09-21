@@ -5,7 +5,7 @@ export default async function Footer() {
 
   return (
     <footer className="bg-brand-black mt-16">
-      <div className="max-w-6xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-3 text-sm text-gray-400">
+      <div className="max-w-6xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-3 text-center md:text-left text-sm text-gray-400">
         <div>
           <p className="text-brand-red font-semibold text-lg mb-3">VS Motors</p>
           <p className="leading-relaxed">Qualidade e confiança na hora de comprar seu carro.
