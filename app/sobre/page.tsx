@@ -78,15 +78,12 @@ export default function SobrePage() {
               em primeiro lugar.
             </p>
             <p>
-              Se você está pesquisando pesquisando as melhores lojas de carros em Jundiaí, encontrou a agência de veículos
+              Se você está pesquisando as melhores lojas de carros em Jundiaí, encontrou a agência de veículos
               ideal para realizar o seu negócio. Nossa revenda conta com um estoque completo e rigorosamente periciado de 
               carros seminovos em Jundiaí, atendendo também clientes de Várzea Paulista, Campo Limpo Paulista, Itupeva, Louveira,
-              Vinhedo entre outras regiões. seminovos.
+              Vinhedo entre outras regiões.
             </p>
-            <p>
-              Por que escolher nossa revenda de veículos em Jundiaí? Comprar um carro seminovo em Jundiaí exige procedência, transparência
-              e as melhores condições de pagamento do mercado. Em nosso estacionamento de carros em Jundiaí, você encontra:
-            </p>
+
           </div>
         </div>
       </section>

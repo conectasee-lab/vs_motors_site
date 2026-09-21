@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import SocialAndMap from "@/components/SocialAndMap";
 import SocialAndMapGate from "@/components/SocialAndMapGate";
 import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
+import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <SmoothScroll />
         <Header />
         <main className="min-h-screen flex-1">{children}</main>
         <SocialAndMapGate>
