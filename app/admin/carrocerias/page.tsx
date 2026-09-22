@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { getBodyTypes } from "@/lib/body-types";
 import { deleteBodyTypeAction } from "./actions";
+import BackToEstoqueButton from "@/components/BackToEstoqueButton";
 
 export default async function CarroceriasPage() {
   await requireUser();
@@ -16,6 +17,7 @@ export default async function CarroceriasPage() {
             <Link href="/admin/carrocerias/novo" className="px-4 py-2 bg-brand-red text-white font-semibold rounded-lg text-sm">
               Nova carroceria
             </Link>
+            <BackToEstoqueButton />
           </div>
         </div>
 

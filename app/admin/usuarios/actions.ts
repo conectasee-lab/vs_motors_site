@@ -45,3 +45,37 @@ export async function resetPasswordAction(formData: FormData): Promise<ActionRes
   revalidatePath("/admin/usuarios");
   return { error: null };
 }
+
+export async function updateUserEmailAction(formData: FormData): Promise<ActionResult> {
+  await requireUser();
+
+  const userId = String(formData.get("userId") ?? "");
+  const email = String(formData.get("email") ?? "").trim();
+
+  if (!userId) return { error: "Usuário inválido." };
+  if (!email) return { error: "Informe o novo e-mail." };
+
+  const supabase = createAdminSupabaseClient();
+  const { error } = await supabase.auth.admin.updateUserById(userId, { email });
+
+  if (error) return { error: `Falha ao editar usuário: ${error.message}` };
+
+  revalidatePath("/admin/usuarios");
+  return { error: null };
+}
+
+export async function deleteUserAction(formData: FormData): Promise<ActionResult> {
+  await requireUser();
+
+  const userId = String(formData.get("userId") ?? "");
+
+  if (!userId) return { error: "Usuário inválido." };
+
+  const supabase = createAdminSupabaseClient();
+  const { error } = await supabase.auth.admin.deleteUser(userId);
+
+  if (error) return { error: `Falha ao excluir usuário: ${error.message}` };
+
+  revalidatePath("/admin/usuarios");
+  return { error: null };
+}

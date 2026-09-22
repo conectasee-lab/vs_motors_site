@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SocialAndMap from "@/components/SocialAndMap";
 import SocialAndMapGate from "@/components/SocialAndMapGate";
+import FooterGate from "@/components/FooterGate";
 import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
 import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
@@ -36,7 +37,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SocialAndMapGate>
           <SocialAndMap />
         </SocialAndMapGate>
-        <Footer />
+        <FooterGate>
+          <Footer />
+        </FooterGate>
         <FloatingWhatsAppButton />
       </body>
     </html>
