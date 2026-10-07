@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getCompanyContact, whatsappDigits } from "@/lib/company-contact";
+import TrackedLink from "@/components/TrackedLink";
 import CopyEmailButton from "@/components/CopyEmailButton";
 import { StoreHoursList, StoreStatusBadge } from "@/components/StoreStatus";
 
@@ -70,14 +71,16 @@ export default async function ContatoPage() {
           />
           <div className="p-6 md:p-8 space-y-8">
           <div>
-            <a
+            <TrackedLink
               href={whatsappHref}
+              metaEvent="Contact"
+              metaParams={{ content_name: "Página de contato" }}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center w-full sm:w-auto bg-brand-red hover:bg-red-700 text-white font-semibold px-8 py-4 rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red"
             >
               Chamar no WhatsApp
-            </a>
+            </TrackedLink>
             <p className="mt-3 text-2xl font-bold text-brand-black tabular-nums">{formatPhone(contact.whatsapp)}</p>
           </div>
 

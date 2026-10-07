@@ -7,6 +7,7 @@ import SocialAndMapGate from "@/components/SocialAndMapGate";
 import FooterGate from "@/components/FooterGate";
 import FloatingWhatsAppButton from "@/components/FloatingWhatsAppButton";
 import SmoothScroll from "@/components/SmoothScroll";
+import MetaPixel from "@/components/MetaPixel";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <SmoothScroll />
+        <MetaPixel />
         <Header />
         <main className="min-h-screen flex-1">{children}</main>
         <SocialAndMapGate>

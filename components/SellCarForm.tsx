@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackMetaEvent } from "@/components/MetaPixel";
 
 const OPTIONS = [
   {
@@ -53,6 +54,7 @@ export default function SellCarForm({ phone }: { phone: string }) {
 
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(lines.join("\n"))}`;
     setHref(url);
+    trackMetaEvent("Lead", { content_name: "Venda seu carro", content_category: get("option") });
     window.open(url, "_blank", "noopener,noreferrer");
   }
 
