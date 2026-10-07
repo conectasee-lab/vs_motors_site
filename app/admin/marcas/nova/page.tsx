@@ -2,13 +2,20 @@
 
 import { useActionState } from "react";
 import { createBrandAction } from "../actions";
+import { prepareBrandLogo, removeUploaded } from "@/lib/storage-upload";
 import BrandForm from "../BrandForm";
 
 type State = { error: string | null };
 
 export default function NovaMarcaPage() {
   const [state, formAction, pending] = useActionState<State, FormData>(
-    async (_prev, formData) => createBrandAction(formData),
+    async (_prev, formData) => {
+      const logo = await prepareBrandLogo(formData);
+      if (logo.error) return { error: logo.error };
+      const result = await createBrandAction(formData);
+      if (result.error) await removeUploaded("brand-logos", logo.uploaded);
+      return result;
+    },
     { error: null }
   );
 

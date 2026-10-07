@@ -2,6 +2,7 @@
 
 import { useActionState, useState, useTransition } from "react";
 import { updateVehicleAction, deleteVehicleAction } from "../../actions";
+import { prepareVehiclePhotos, removeUploaded } from "@/lib/storage-upload";
 import VehicleForm from "@/components/VehicleForm";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import type { Vehicle } from "@/lib/vehicles";
@@ -23,7 +24,13 @@ export default function EditarVeiculoForm({
   accessories: Accessory[];
 }) {
   const [state, formAction, pending] = useActionState<State, FormData>(
-    async (_prev, formData) => updateVehicleAction(vehicle.id, formData),
+    async (_prev, formData) => {
+      const photos = await prepareVehiclePhotos(formData, vehicle.id);
+      if (photos.error) return { error: photos.error };
+      const result = await updateVehicleAction(vehicle.id, formData);
+      if (result.error) await removeUploaded("vehicle-photos", photos.uploaded);
+      return result;
+    },
     { error: null }
   );
   const [deleteError, setDeleteError] = useState<string | null>(null);

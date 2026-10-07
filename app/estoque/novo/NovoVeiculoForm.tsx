@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { createVehicleAction } from "../actions";
+import { prepareVehiclePhotos, removeUploaded } from "@/lib/storage-upload";
 import VehicleForm from "@/components/VehicleForm";
 import type { Brand } from "@/lib/brands";
 import type { BodyType } from "@/lib/body-types";
@@ -19,7 +20,13 @@ export default function NovoVeiculoForm({
   accessories: Accessory[];
 }) {
   const [state, formAction, pending] = useActionState<State, FormData>(
-    async (_prev, formData) => createVehicleAction(formData),
+    async (_prev, formData) => {
+      const photos = await prepareVehiclePhotos(formData);
+      if (photos.error) return { error: photos.error };
+      const result = await createVehicleAction(formData);
+      if (result.error) await removeUploaded("vehicle-photos", photos.uploaded);
+      return result;
+    },
     { error: null }
   );
 

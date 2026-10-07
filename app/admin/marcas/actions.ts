@@ -4,19 +4,16 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { validatePhotos, sanitizeFileName } from "@/lib/vehicle-photos";
+import { isBucketPublicUrl } from "@/lib/storage";
 
 type ActionResult = { error: string | null };
 
-async function uploadLogo(
-  supabase: Awaited<ReturnType<typeof createServerSupabaseClient>>,
-  file: File
-): Promise<string> {
-  const path = `${Date.now()}-${sanitizeFileName(file.name)}`;
-  const { error } = await supabase.storage.from("brand-logos").upload(path, file);
-  if (error) throw new Error(`Falha ao enviar logo: ${error.message}`);
-  const { data } = supabase.storage.from("brand-logos").getPublicUrl(path);
-  return data.publicUrl;
+/** Logo URL the browser already uploaded to the "brand-logos" bucket, if any. */
+function parseLogoUrl(formData: FormData): { url: string | null; error: string | null } {
+  const url = String(formData.get("logo_url") ?? "").trim();
+  if (!url) return { url: null, error: null };
+  if (!isBucketPublicUrl(url, "brand-logos")) return { url: null, error: "Logo inválida." };
+  return { url, error: null };
 }
 
 function friendlyInsertError(message: string): string {
@@ -32,27 +29,11 @@ export async function createBrandAction(formData: FormData): Promise<ActionResul
   const name = String(formData.get("name") ?? "").trim();
   if (!name) return { error: "Informe o nome da marca." };
 
-  const logo = formData.get("logo");
-  const logoFile = logo instanceof File && logo.size > 0 ? logo : null;
-
-  if (logoFile) {
-    const photoCheck = validatePhotos(0, [{ name: logoFile.name, type: logoFile.type, size: logoFile.size }]);
-    if (photoCheck.error) return { error: photoCheck.error };
-  }
+  const logo = parseLogoUrl(formData);
+  if (logo.error) return { error: logo.error };
 
   const supabase = await createServerSupabaseClient();
-
-  let logoUrl: string | null = null;
-  if (logoFile) {
-    try {
-      logoUrl = await uploadLogo(supabase, logoFile);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Falha ao enviar logo.";
-      return { error: message };
-    }
-  }
-
-  const { error } = await supabase.from("brands").insert({ name, logo_url: logoUrl });
+  const { error } = await supabase.from("brands").insert({ name, logo_url: logo.url });
   if (error) return { error: friendlyInsertError(error.message) };
 
   revalidatePath("/admin/marcas");
@@ -69,27 +50,11 @@ export async function updateBrandAction(
   const name = String(formData.get("name") ?? "").trim();
   if (!name) return { error: "Informe o nome da marca." };
 
-  const logo = formData.get("logo");
-  const logoFile = logo instanceof File && logo.size > 0 ? logo : null;
-
-  if (logoFile) {
-    const photoCheck = validatePhotos(0, [{ name: logoFile.name, type: logoFile.type, size: logoFile.size }]);
-    if (photoCheck.error) return { error: photoCheck.error };
-  }
+  const logo = parseLogoUrl(formData);
+  if (logo.error) return { error: logo.error };
 
   const supabase = await createServerSupabaseClient();
-
-  let logoUrl = currentLogoUrl;
-  if (logoFile) {
-    try {
-      logoUrl = await uploadLogo(supabase, logoFile);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Falha ao enviar logo.";
-      return { error: message };
-    }
-  }
-
-  const { error } = await supabase.from("brands").update({ name, logo_url: logoUrl }).eq("id", id);
+  const { error } = await supabase.from("brands").update({ name, logo_url: logo.url ?? currentLogoUrl }).eq("id", id);
   if (error) return { error: friendlyInsertError(error.message) };
 
   revalidatePath("/admin/marcas");

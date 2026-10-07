@@ -1,9 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
 
+vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
+const PHOTO_PREFIX = "https://example.supabase.co/storage/v1/object/public/vehicle-photos/";
+
 const requireUserMock = vi.fn();
 const fromMock = vi.fn();
-const uploadMock = vi.fn();
-const getPublicUrlMock = vi.fn();
 
 vi.mock("@/lib/auth", () => ({
   requireUser: requireUserMock,
@@ -12,9 +13,6 @@ vi.mock("@/lib/auth", () => ({
 vi.mock("@/lib/supabase/server", () => ({
   createServerSupabaseClient: vi.fn(async () => ({
     from: fromMock,
-    storage: {
-      from: () => ({ upload: uploadMock, getPublicUrl: getPublicUrlMock }),
-    },
   })),
 }));
 
@@ -60,7 +58,7 @@ describe("createVehicleAction", () => {
     requireUserMock.mockResolvedValueOnce({ id: "u1" });
     const fd = baseFormData();
     for (let i = 0; i < 15; i++) {
-      fd.append("photos", new File(["x"], `p${i}.jpg`, { type: "image/jpeg" }));
+      fd.append("photo_urls", `${PHOTO_PREFIX}v/p${i}.jpg`);
     }
     const { createVehicleAction } = await import("./actions");
 
@@ -69,51 +67,54 @@ describe("createVehicleAction", () => {
     expect(fromMock).not.toHaveBeenCalled();
   });
 
-  it("returns a friendly error and deletes the orphaned row when photo upload fails", async () => {
+  it("rejects photo URLs outside the vehicle-photos bucket", async () => {
     requireUserMock.mockResolvedValueOnce({ id: "u1" });
-    uploadMock.mockResolvedValueOnce({ error: { message: "bucket unreachable" } });
+    fromMock.mockClear();
+    const fd = baseFormData();
+    fd.append("photo_urls", "https://evil.example/p1.jpg");
+    const { createVehicleAction } = await import("./actions");
 
-    const deleteEqMock = vi.fn().mockResolvedValue({ error: null });
+    const result = await createVehicleAction(fd);
+    expect(result).toEqual({ error: "Foto inválida." });
+    expect(fromMock).not.toHaveBeenCalled();
+  });
+
+  it("inserts the vehicle with the uploaded photos, featured first", async () => {
+    requireUserMock.mockResolvedValueOnce({ id: "u1" });
     const singleMock = vi.fn().mockResolvedValue({ data: { id: "v1" }, error: null });
-    const selectMock = vi.fn(() => ({ single: singleMock }));
-    const insertMock = vi.fn(() => ({ select: selectMock }));
-
+    const insertMock = vi.fn(() => ({ select: () => ({ single: singleMock }) }));
     fromMock.mockImplementation((table: string) => {
       expect(table).toBe("vehicles");
-      return {
-        insert: insertMock,
-        delete: () => ({ eq: deleteEqMock }),
-      };
+      return { insert: insertMock };
     });
 
     const fd = baseFormData();
-    fd.append("photos", new File(["x"], "p1.jpg", { type: "image/jpeg" }));
+    fd.append("photo_urls", `${PHOTO_PREFIX}v/p0.jpg`);
+    fd.append("photo_urls", `${PHOTO_PREFIX}v/p1.jpg`);
+    fd.set("featured", "new:1");
 
     const { createVehicleAction } = await import("./actions");
-    const result = await createVehicleAction(fd);
+    await createVehicleAction(fd);
 
-    expect(result).toEqual({
-      error: "Falha ao enviar foto p1.jpg: bucket unreachable",
-    });
-    expect(deleteEqMock).toHaveBeenCalledWith("id", "v1");
+    expect(insertMock).toHaveBeenCalledWith(
+      expect.objectContaining({ images: [`${PHOTO_PREFIX}v/p1.jpg`, `${PHOTO_PREFIX}v/p0.jpg`] }),
+    );
   });
 });
 
 describe("updateVehicleAction", () => {
-  it("returns a friendly error without throwing when photo upload fails", async () => {
+  it("rejects when kept plus uploaded photos exceed the limit", async () => {
     requireUserMock.mockResolvedValueOnce({ id: "u1" });
-    uploadMock.mockResolvedValueOnce({ error: { message: "bucket unreachable" } });
     fromMock.mockReset();
 
     const fd = baseFormData();
-    fd.append("photos", new File(["x"], "p1.jpg", { type: "image/jpeg" }));
+    for (let i = 0; i < 14; i++) fd.append("kept_images", `${PHOTO_PREFIX}v1/k${i}.jpg`);
+    fd.append("photo_urls", `${PHOTO_PREFIX}v1/new.jpg`);
 
     const { updateVehicleAction } = await import("./actions");
     const result = await updateVehicleAction("v1", fd);
 
-    expect(result).toEqual({
-      error: "Falha ao enviar foto p1.jpg: bucket unreachable",
-    });
+    expect(result).toEqual({ error: "Máximo de 14 fotos por veículo." });
     expect(fromMock).not.toHaveBeenCalled();
   });
 
